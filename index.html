@@ -3,416 +3,195 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CaliSide City RP Store with Login & Preview</title>
+<title>Cali Side City RP Shop</title>
 <style>
-  * {
-    box-sizing: border-box;
-  }
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url('https://i.imgur.com/GZNrBbW.png') no-repeat center center fixed;
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: url('https://imgur.com/GZNrBbW.png') no-repeat center center fixed;
     background-size: cover;
-    color: #f0f0f0;
-    position: relative;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(15,15,15,0.85);
-    z-index: 0;
-  }
-  #app {
-    position: relative;
-    z-index: 1;
-    max-width: 980px;
-    margin: 0 auto;
-    padding: 30px 20px 60px;
-    transition: filter 0.5s ease;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  header h1 {
-    font-size: 3rem;
-    font-weight: 900;
-    letter-spacing: 3px;
-    margin-bottom: 8px;
-    text-shadow: 0 0 8px #007bffaa;
-  }
-  header p {
-    font-size: 1.2rem;
-    color: #bbb;
-  }
-  /* Cart top-right corner */
-  #cart-icon {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    background: #007bffcc;
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    box-shadow: 0 0 10px #007bffaa;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 300;
-  }
-  #cart-icon svg {
-    fill: white;
-    width: 28px;
-    height: 28px;
-  }
-  #cart-count {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    background: #cc0000;
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    font-weight: 700;
     color: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
   }
-  /* Blur overlay for locked view */
-  #blur-overlay {
-    position: fixed;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(8px);
-    z-index: 200;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #00aaff;
-    padding: 20px;
-    text-align: center;
+  .overlay {
+    background-color: rgba(0,0,0,0.75);
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 15px;
   }
-  #blur-overlay h2 {
-    font-size: 2.8rem;
-    margin-bottom: 18px;
+  h1, h2, h3 {
+    color: #00BFFF;
+    margin-bottom: 10px;
   }
-  #blur-overlay input {
-    width: 280px;
-    max-width: 90vw;
-    padding: 14px 18px;
-    margin: 8px 0;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-  }
-  #blur-overlay button {
-    width: 300px;
-    max-width: 90vw;
-    margin-top: 15px;
-    background: #00aaff;
-    border: none;
-    padding: 16px 0;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 1.3rem;
-    color: white;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  #blur-overlay button:hover {
-    background: #008fcc;
-  }
-  #blur-overlay small {
-    display: block;
-    margin-top: 12px;
-    color: #888;
-    font-size: 0.85rem;
-  }
-  #blur-message {
-    color: #ff5555;
-    margin-top: 8px;
-    font-weight: 700;
-    min-height: 1.2rem;
-  }
-  /* Login/Register */
-  #dashboard-section {
-    max-width: 940px;
-    margin: 0 auto 40px;
-    background: rgba(30,30,30,0.9);
-    padding: 28px 30px;
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-    display: none;
-  }
-  #dashboard-section h2 {
-    color: #00aaff;
-    margin-bottom: 18px;
-    text-align: center;
-  }
-  #logout-btn {
-    display: block;
-    margin: 0 auto 20px auto;
-    background: #cc0000;
-    border: none;
-    padding: 14px 0;
-    border-radius: 8px;
-    color: white;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: pointer;
-    width: 180px;
-  }
-  #logout-btn:hover {
-    background: #990000;
-  }
-  /* Products grid */
-  .products {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
-    margin-bottom: 40px;
-  }
-  .card {
-    background: rgba(30,30,30,0.85);
+  .product {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid #00BFFF;
     border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    position: relative;
-  }
-  .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 40px rgba(0,123,255,0.7);
-  }
-  .card img {
-    max-height: 160px;
-    object-fit: contain;
-    margin-bottom: 18px;
-    border-radius: 8px;
-    background: #111;
-    padding: 10px;
-  }
-  .card h2 {
-    font-size: 1.5rem;
-    margin: 0 0 12px;
-    font-weight: 700;
-    color: #00aaff;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card p {
-    flex-grow: 1;
-    color: #ccc;
-    font-size: 1rem;
     margin-bottom: 20px;
-    line-height: 1.4;
-  }
-  .out-of-stock {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: #cc0000cc;
-    color: white;
-    font-weight: 800;
-    padding: 6px 14px;
-    border-radius: 16px;
-    font-size: 1rem;
-    text-transform: uppercase;
-    pointer-events: none;
-    user-select: none;
-    box-shadow: 0 0 10px #cc0000bb;
-  }
-  .buy-button {
-    background: #555;
-    border: none;
-    padding: 14px 0;
-    border-radius: 8px;
-    color: #bbb;
-    font-weight: 700;
-    font-size: 1.1rem;
-    cursor: not-allowed;
-  }
-  .buy-button.enabled {
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  .buy-button.enabled:hover {
-    background: #005fbb;
-  }
-  /* Cart panel */
-  #cart-panel {
-    position: fixed;
-    top: 80px;
-    right: 18px;
-    width: 320px;
-    max-height: 60vh;
-    overflow-y: auto;
-    background: rgba(20,20,20,0.95);
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.85);
-    color: #ddd;
-    z-index: 301;
-    display: none;
-    flex-direction: column;
-  }
-  #cart-panel h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    color: #00aaff;
-    text-align: center;
-  }
-  #cart-items {
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: 300px;
-    background: #111;
-    padding: 12px 14px;
-    border-radius: 8px;
-    font-size: 1rem;
-    line-height: 1.4;
-  }
-  #cart-items div {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
   }
-  #total {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-top: 14px;
-    text-align: right;
-    color: #00d8ff;
-  }
-  #checkout-btn {
-    margin-top: 20px;
-    background: #007bff;
-    width: 100%;
-    border: none;
-    padding: 14px 0;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: white;
+  .product img {
+    width: 120px;
     border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
   }
-  #checkout-btn:disabled {
-    background: #555;
-    color: #bbb;
-    cursor: not-allowed;
+  .details {
+    max-width: 70%;
   }
-  #checkout-btn:hover:not(:disabled) {
-    background: #005fbb;
+  .price {
+    font-size: 1.3rem;
+    margin: 10px 0;
   }
-  /* Footer */
-  footer {
-    margin-top: 60px;
+  .out-stock {
+    color: #ff4c4c;
+    font-weight: bold;
+  }
+  .order-history {
+    background: rgba(0,0,0,0.8);
+    border: 2px solid #00BFFF;
+    border-radius: 12px;
     padding: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+  }
+  th, td {
+    border: 1px solid #00BFFF;
+    padding: 10px;
     text-align: center;
-    font-size: 1rem;
-    color: #00aaff;
-    letter-spacing: 1.2px;
   }
-  footer a {
-    color: #00aaff;
+  #login-section {
+    background: rgba(0,0,0,0.8);
+    border: 2px solid #00BFFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px 0;
+    max-width: 400px;
+  }
+  input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px 0;
+    border: none;
+    border-radius: 8px;
+  }
+  button {
+    background-color: #00BFFF;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  button:hover {
+    background-color: #0095d6;
+  }
+  a {
+    color: #00BFFF;
+    text-decoration: none;
+  }
+  a:hover {
     text-decoration: underline;
-  }
-  /* Scrollbars */
-  #cart-items::-webkit-scrollbar {
-    width: 8px;
-  }
-  #cart-items::-webkit-scrollbar-track {
-    background: #111;
-  }
-  #cart-items::-webkit-scrollbar-thumb {
-    background: #007bffaa;
-    border-radius: 6px;
-  }
-  /* Responsive */
-  @media (max-width: 480px) {
-    header h1 {
-      font-size: 2.4rem;
-    }
-    #dashboard-section {
-      max-width: 90vw;
-    }
-    #cart-panel {
-      width: 90vw;
-      right: 5vw;
-      top: 70px;
-      max-height: 50vh;
-    }
   }
 </style>
 </head>
 <body>
-  <div id="app" aria-live="polite">
 
-    <header>
-      <h1>🛒 CaliSide City RP Store</h1>
-      <p>🔥 All items currently out of stock — stay tuned for restocks!</p>
-    </header>
+  <div class="overlay">
 
-    <!-- User Dashboard -->
-    <section id="dashboard-section" aria-label="User Dashboard">
-      <h2>Welcome, <span id="user-display"></span>!</h2>
-      <button id="logout-btn">Logout</button>
-    </section>
+    <h1>🛒 Cali Side City RP Shop</h1>
+    <p>Official store — purchase in-game items and send your Order ID in our Discord ticket.</p>
 
     <!-- Products -->
-    <section class="products" aria-label="Products for sale" id="products-section">
-      <!-- Products are generated dynamically -->
-    </section>
-
-    <!-- Cart icon top right -->
-    <div id="cart-icon" role="button" aria-label="Open shopping cart" tabindex="0">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M7 18c-1.104 0-2 .897-2 2s.896 2 2 2 2-.897 2-2-.896-2-2-2zm10 0c-1.104 0-2 .897-2 2s.896 2 2 2 2-.897 2-2-.896-2-2-2zM7.2 14l.94-2h8.12c.85 0 1.55-.6 1.72-1.43l1.44-7.02-1.72-.36L16.12 9H7.2z"/>
-      </svg>
-      <div id="cart-count" aria-live="polite" aria-atomic="true">0</div>
+    <div class="product">
+      <div class="details">
+        <h2>🔵 Blue Glock Switch (x2) + 10K Ammo</h2>
+        <p class="price">$10.00</p>
+        <p class="out-stock">🚫 Out of Stock</p>
+      </div>
+      <img src="https://imgur.com/GZNrBbW.png" alt="Blue Glock Switch" />
     </div>
 
-    <!-- Cart panel -->
-    <section id="cart-panel" aria-label="Shopping Cart">
-      <h3>🛒 Your Cart</h3>
-      <div id="cart-items">No items yet.</div>
-      <p id="total">Total: $0</p>
-      <button id="checkout-btn" disabled>Checkout</button>
-    </section>
+    <div class="product">
+      <div class="details">
+        <h2>💰 1M City Coins</h2>
+        <p class="price">$15.00</p>
+        <p class="out-stock">🚫 Out of Stock</p>
+      </div>
+      <img src="https://imgur.com/GZNrBbW.png" alt="1M City Coins" />
+    </div>
 
-    <footer>
-      2025 CaliSide City RP — Join our Discord: <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">https://discord.gg/FkqyasFRAs</a>
-    </footer>
+    <div class="product">
+      <div class="details">
+        <h2>🔫 Standard Blue Glock</h2>
+        <p class="price">$5.00</p>
+        <p class="out-stock">🚫 Out of Stock</p>
+      </div>
+      <img src="https://imgur.com/GZNrBbW.png" alt="Standard Blue Glock" />
+    </div>
+
+    <!-- Login -->
+    <div id="login-section">
+      <h2>👤 Login or Sign Up</h2>
+      <form id="loginForm">
+        <input type="text" placeholder="Username" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <button type="button" onclick="alert('Sign up feature coming soon!')">Sign Up</button>
+      </form>
+    </div>
+
+    <!-- Order History -->
+    <div class="order-history">
+      <h2>📜 My Orders</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Product</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="orderList">
+          <!-- JS inserts orders here -->
+        </tbody>
+      </table>
+    </div>
 
   </div>
 
-  <!-- Modal for order ID -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" style="display:none; position:fixed; z-index:1000; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
-    <div id="modal" style="background:#222; padding:32px 28px; border-radius:16px; box-shadow:0 0 30px #00aaffaa; max-width:400px; color:#0ff; text-align:center;">
-      <h2 id="modal-title">✅ Order Complete!</h2>
-      <p id="modal-desc">
-        Please send this Order ID in a ticket on our Discord for fast delivery:<br/><br/>
-        <strong id="modal-order-id" style="word-break:break-word;"></strong><br/><br/>
-        Discord: <a href="https://discord.gg/FkqyasFRAs" target="_blank" style="color:#0ff; text-decoration:underline;">https://discord.gg/FkqyasFRAs</a>
-      </p>
-      <button onclick="closeModal()" style="background:#00aaff; border:none; padding:12px 24px; border-radius:12px; font-weight:700; font-size:1.1rem; color:white; cursor:pointer; transition:background 0.3s ease;">Got it!</button>
-    </div>
-  </div>
+<script>
+  const orders = [
+    { id: '#123ABC', product: 'Blue Glock Switch', status: 'Completed', date: '2025-07-22' },
+    { id: '#456DEF', product: '1M City Coins', status: 'Pending', date: '2025-07-21' }
+  ];
 
-  <!-- Blur login/preview overlay -->
-  <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="blur-title" aria-describedby="blur-desc" >
-    <h2 id="blur-title">Welcome to CaliSide City RP Store</h2>
-    <input type="text" id="login-username" placeholder="Username" aria-label="Username" autocomplete="username
+  const orderList = document.getElementById('orderList');
+  orders.forEach(order => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td>${order.id}</td>
+      <td>${order.product}</td>
+      <td>${order.status}</td>
+      <td>${order.date}</td>
+    `;
+    orderList.appendChild(row);
+  });
+
+  // Login form submit example
+  document.getElementById('loginForm').addEventListener('submit', e => {
+    e.preventDefault();
+    alert('Login feature coming soon!');
+  });
+</script>
+
+</body>
+</html>
