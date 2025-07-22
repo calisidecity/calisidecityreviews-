@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cali Side RP Store</title>
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: url('your-bg-image.jpg') no-repeat center center fixed;
+      background: url('https://imgur.com/vpZMJmz') no-repeat center center fixed;
       background-size: cover;
       color: white;
     }
@@ -30,43 +30,6 @@
       text-decoration: none;
       font-size: 1.1em;
     }
-    .search-bar {
-      text-align: center;
-      margin: 20px;
-    }
-    .search-bar input {
-      padding: 10px;
-      width: 50%;
-      font-size: 1em;
-      border-radius: 5px;
-      border: none;
-    }
-    .store {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 20px;
-    }
-    .item {
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      padding: 15px;
-      text-align: center;
-    }
-    .item img {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-    }
-    .item button {
-      margin-top: 10px;
-      padding: 10px 15px;
-      background-color: #00bfff;
-      border: none;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-    }
     .cart {
       position: fixed;
       top: 20px;
@@ -74,87 +37,155 @@
       background: #111;
       padding: 10px 15px;
       border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1000;
+    }
+    .search-container {
+      max-width: 400px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .store {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto 40px auto;
+    }
+    .item {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      user-select: none;
+    }
+    .item img {
+      width: 100%;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #222;
+    }
+    .item h3 {
+      margin: 10px 0 5px 0;
+      font-weight: 600;
+    }
+    .item p {
+      margin: 0 0 10px 0;
+      font-size: 1.1em;
+    }
+    .item button {
+      padding: 10px 15px;
+      background-color: #444;
+      border: none;
+      color: #999;
+      cursor: not-allowed;
+      border-radius: 5px;
+      font-weight: bold;
     }
   </style>
-  <script>
-    function searchItems() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const items = document.getElementsByClassName("item");
-      Array.from(items).forEach(item => {
-        const title = item.getElementsByTagName("h3")[0].textContent.toLowerCase();
-        item.style.display = title.includes(input) ? "block" : "none";
-      });
-    }
-  </script>
 </head>
 <body>
   <header>
     <div class="logo">Cali Side RP Store 🛒</div>
     <div class="discord-link">
-      <a href="https://discord.gg/FkqyasFRAs" target="_blank">Join our Discord 💬</a>
+      <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">Join our Discord 💬</a>
     </div>
   </header>
 
   <div class="cart">🛒 Cart (0)</div>
 
-  <div class="search-bar">
-    <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="🔍 Search store items...">
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search store items..." oninput="filterItems()" />
   </div>
 
-  <section class="store">
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="Blue Glock">
+  <section class="store" id="store">
+    <div class="item" data-name="Blue Glock Switch">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="Blue Glock Switch" />
       <h3>🔫 Blue Glock Switch (2) + 10K Ammo</h3>
       <p>💵 $10 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="Custom Drug">
+
+    <div class="item" data-name="Custom Drug">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="Custom Drug" />
       <h3>💊 Custom Drug (4 Pieces)</h3>
       <p>💵 $30 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="Custom Clothing">
+
+    <div class="item" data-name="Custom Clothing">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="Custom Clothing" />
       <h3>👕 Custom Clothing</h3>
       <p>💵 $15 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="Personal Gun">
+
+    <div class="item" data-name="Custom Personal Gun">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="Custom Personal Gun" />
       <h3>🔫 Custom Personal Gun</h3>
       <p>💵 $50 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="5K Coins">
+
+    <div class="item" data-name="5K Coins">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="5K Coins" />
       <h3>🪙 5K Coins</h3>
       <p>💵 $50 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="4K Coins">
+
+    <div class="item" data-name="4K Coins">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="4K Coins" />
       <h3>🪙 4K Coins</h3>
       <p>💵 $40 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="3K Coins">
+
+    <div class="item" data-name="3K Coins">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="3K Coins" />
       <h3>🪙 3K Coins</h3>
       <p>💵 $30 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
-    <div class="item">
-      <img src="https://imgur.com/vpZMJmz.png" alt="2K Coins">
+
+    <div class="item" data-name="2K Coins">
+      <img src="https://i.imgur.com/vpZMJmz.png" alt="2K Coins" />
       <h3>🪙 2K Coins</h3>
       <p>💵 $20 — Out of Stock</p>
       <button disabled>Out of Stock</button>
     </div>
   </section>
+
+<script>
+  function filterItems() {
+    const input = document.getElementById('searchInput').value.toLowerCase();
+    const items = document.querySelectorAll('.store .item');
+
+    items.forEach(item => {
+      const name = item.getAttribute('data-name').toLowerCase();
+      if (name.includes(input)) {
+        item.style.display = '';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  }
+</script>
+
 </body>
 </html>
 
-
-
- 
    
