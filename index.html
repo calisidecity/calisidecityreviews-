@@ -1,1 +1,433 @@
-l
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CaliSide City RP Store with Login & Cart</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url('https://i.imgur.com/GZNrBbW.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #f0f0f0;
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(15,15,15,0.85);
+    z-index: 0;
+  }
+  #app {
+    position: relative;
+    z-index: 1;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+    transition: filter 0.5s ease;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  header h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+    text-shadow: 0 0 8px #007bffaa;
+  }
+  header p {
+    font-size: 1.2rem;
+    color: #bbb;
+  }
+  /* Blur overlay for locked view */
+  #blur-overlay {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #00aaff;
+    padding: 20px;
+    text-align: center;
+  }
+  #blur-overlay h2 {
+    font-size: 2.8rem;
+    margin-bottom: 18px;
+  }
+  #blur-overlay input {
+    width: 280px;
+    max-width: 90vw;
+    padding: 14px 18px;
+    margin: 8px 0;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+  }
+  #blur-overlay button {
+    width: 300px;
+    max-width: 90vw;
+    margin-top: 15px;
+    background: #00aaff;
+    border: none;
+    padding: 16px 0;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #blur-overlay button:hover {
+    background: #008fcc;
+  }
+  #blur-overlay small {
+    display: block;
+    margin-top: 12px;
+    color: #888;
+    font-size: 0.85rem;
+  }
+  #blur-message {
+    color: #ff5555;
+    margin-top: 8px;
+    font-weight: 700;
+    min-height: 1.2rem;
+  }
+  /* Login/Register */
+  #dashboard-section {
+    max-width: 940px;
+    margin: 0 auto 40px;
+    background: rgba(30,30,30,0.9);
+    padding: 28px 30px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    display: none;
+  }
+  #dashboard-section h2 {
+    color: #00aaff;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+  #logout-btn {
+    display: block;
+    margin: 0 auto 20px auto;
+    background: #cc0000;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 180px;
+  }
+  #logout-btn:hover {
+    background: #990000;
+  }
+  /* Products grid */
+  .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+    margin-bottom: 40px;
+  }
+  .card {
+    background: rgba(30,30,30,0.85);
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+  }
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0,123,255,0.7);
+  }
+  .card img {
+    max-height: 160px;
+    object-fit: contain;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    background: #111;
+    padding: 10px;
+  }
+  .card h2 {
+    font-size: 1.5rem;
+    margin: 0 0 12px;
+    font-weight: 700;
+    color: #00aaff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card p {
+    flex-grow: 1;
+    color: #ccc;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+  .out-of-stock {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #cc0000cc;
+    color: white;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 1rem;
+    text-transform: uppercase;
+    pointer-events: none;
+    user-select: none;
+    box-shadow: 0 0 10px #cc0000bb;
+  }
+  .buy-button {
+    background: #007bff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .buy-button:disabled {
+    background: #555;
+    color: #bbb;
+    cursor: not-allowed;
+  }
+  .buy-button:hover:not(:disabled) {
+    background: #005fbb;
+  }
+  /* Fixed Cart Icon Top Right */
+  #cart-icon {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    width: 50px;
+    height: 50px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 15px #007bffcc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+  }
+  #cart-icon svg {
+    fill: white;
+    width: 28px;
+    height: 28px;
+  }
+  #cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #cc0000;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    box-shadow: 0 0 10px #cc0000bb;
+  }
+  /* Slide-in Cart Panel */
+  #cart-panel {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 400px;
+    height: 100%;
+    background: rgba(25,25,25,0.95);
+    box-shadow: -4px 0 30px rgba(0,0,0,0.9);
+    border-left: 3px solid #007bff;
+    padding: 30px 24px;
+    transition: right 0.3s ease;
+    z-index: 299;
+    display: flex;
+    flex-direction: column;
+  }
+  #cart-panel.open {
+    right: 0;
+  }
+  #cart-panel h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #00aaff;
+    text-align: center;
+  }
+  #cart-items {
+    flex-grow: 1;
+    overflow-y: auto;
+    background: #111;
+    padding: 15px 20px;
+    border-radius: 10px;
+    color: #ddd;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  #cart-items div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  #total {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: right;
+    color: #00d8ff;
+  }
+  .checkout-button {
+    background: #007bff;
+    width: 100%;
+    border: none;
+    padding: 16px 0;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .checkout-button:disabled {
+    background: #555;
+    color: #bbb;
+    cursor: not-allowed;
+  }
+  .checkout-button:hover:not(:disabled) {
+    background: #005fbb;
+  }
+  /* Close Cart Button */
+  #close-cart-btn {
+    background: transparent;
+    border: none;
+    color: #00aaff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    align-self: flex-end;
+    margin-bottom: 10px;
+  }
+  #close-cart-btn:hover {
+    color: #008fcc;
+  }
+  footer {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+    letter-spacing: 1.2px;
+  }
+  a {
+    color: #00aaff;
+    text-decoration: underline;
+  }
+  /* Scrollbars */
+  #cart-items::-webkit-scrollbar {
+    width: 8px;
+  }
+  #cart-items::-webkit-scrollbar-track {
+    background: #111;
+  }
+  #cart-items::-webkit-scrollbar-thumb {
+    background: #007bffaa;
+    border-radius: 6px;
+  }
+  /* Responsive */
+  @media (max-width: 480px) {
+    header h1 {
+      font-size: 2.4rem;
+    }
+    #dashboard-section {
+      max-width: 90vw;
+    }
+    #cart-panel {
+      width: 90vw;
+    }
+  }
+</style>
+</head>
+<body>
+  <div id="app" aria-live="polite">
+
+    <header>
+      <h1>🛒 CaliSide City RP Store</h1>
+      <p>🔥 All items currently out of stock — stay tuned for restocks!</p>
+    </header>
+
+    <!-- User Dashboard -->
+    <section id="dashboard-section" aria-label="User Dashboard">
+      <h2>Welcome, <span id="user-display"></span>!</h2>
+      <button id="logout-btn">Logout</button>
+    </section>
+
+    <!-- Products -->
+    <section class="products" aria-label="Products for sale">
+      <!-- Cards will be populated by JS -->
+    </section>
+
+    <footer>
+      📬 Join our <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener">Discord</a> for updates and support!
+    </footer>
+
+  </div>
+
+  <!-- Cart Icon -->
+  <div id="cart-icon" aria-label="Shopping Cart" role="button" tabindex="0">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h-2l-3 9v7a1 1 0 001 1h16a1 1 0 001-1v-7l-3-9h-2"></path><circle cx="9" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle></svg>
+    <div id="cart-count" aria-live="polite" aria-atomic="true">0</div>
+  </div>
+
+  <!-- Cart Panel -->
+  <aside id="cart-panel" aria-label="Shopping cart panel" role="region" aria-hidden="true">
+    <button id="close-cart-btn" aria-label="Close cart">&times;</button>
+    <h3>🛒 Your Cart</h3>
+    <div id="cart-items">No items yet.</div>
+    <p id="total">Total: $0</p>
+    <button class="checkout-button" id="checkout-btn" disabled>Checkout</button>
+    <div id="order-result" aria-live="polite"></div>
+  </aside>
+
+  <!-- Modal for order ID -->
+  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" style="display:none; position:fixed; z-index:400; left:0; top:0; right:0; bottom:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+    <div id="modal">
+      <h2 id="modal-title">✅ Order Complete!</h2>
+      <p id="modal-desc">
+        Please send this Order ID in a ticket on our Discord for fast delivery:<br/><br/>
+        <strong id="modal-order-id" style="word-break:break-word;"></strong><br/><br/>
+        Discord: <a href="https://discord.gg/FkqyasFRAs" target="_blank" style="color:#0ff; text-decoration:underline;">https://discord.gg/FkqyasFRAs</a>
+      </p>
+      <button onclick="closeModal()">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Blur login/preview overlay -->
+  <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="blur-title" aria-describedby="blur-desc" >
+    <h2 id="blur-title">Welcome to CaliSide City RP Store</h2>
+    <input type="text" id="login-username" placeholder="Username" aria-label="Username" autocomplete="username" />
+    <input type="password" id="login-password" placeholder="Password" aria-label
