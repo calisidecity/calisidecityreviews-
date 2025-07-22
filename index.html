@@ -54,18 +54,23 @@
     right: 20px;
     background: #007bffcc;
     color: white;
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     font-weight: 900;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 105;
     user-select: none;
-    box-shadow: 0 0 10px #007bffaa;
+    box-shadow: 0 0 12px #007bffaa;
+    gap: 6px;
+  }
+  #cart-icon span {
+    font-size: 1.3rem;
+    user-select: none;
   }
   /* Blur overlay for locked view */
   #blur-overlay {
@@ -390,33 +395,13 @@
 
     <!-- Products -->
     <section class="products" aria-label="Products for sale">
-      <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
-        <img src="https://i.imgur.com/GZNrBbW.png" alt="1,000 Coins" />
-        <h2>💰 1,000 Coins – $10</h2>
-        <p>Buy big stacks for your grind. Delivered instantly.</p>
-        <button class="buy-button" disabled>Add to Cart</button>
-      </div>
-
-      <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
-        <img src="https://i.imgur.com/GZNrBbW.png" alt="Glock Drum" />
-        <h2>🔫 Glock Drum w/ Switch + Beam – $10</h2>
-        <p>Upgrade your street loadout. No cap.</p>
-        <button class="buy-button" disabled>Add to Cart</button>
-      </div>
-
-      <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
-        <img src="https://i.imgur.com/GZNrBbW.png" alt="Blue Glock" />
-        <h2>🔵 Blue Glock w/ Switch (2 pcs + 10k Ammo) – $5</h2>
-        <p>Clean & custom for your RP grind.</p>
-        <button class="buy-button" disabled>Add to Cart</button>
-      </div>
+      <!-- Products will be injected here -->
     </section>
 
     <!-- Cart Icon -->
-    <div id="cart-icon" title="View Cart">0</div>
+    <div id="cart-icon" title="View Cart" aria-label="Shopping cart, click to open cart">
+      <span>🛒</span> <span id="cart-count">0</span>
+    </div>
 
     <!-- Cart Panel -->
     <div id="cart-panel" aria-label="Shopping Cart">
@@ -470,6 +455,7 @@
   const logoutBtn = document.getElementById('logout-btn');
 
   const cartIcon = document.getElementById('cart-icon');
+  const cartCountSpan = document.getElementById('cart-count');
   const cartPanel = document.getElementById('cart-panel');
   const cartItemsDiv = document.getElementById('cart-items');
   const totalPriceP = document.getElementById('total');
@@ -478,30 +464,64 @@
   const modalOverlay = document.getElementById('modal-overlay');
   const modalOrderId = document.getElementById('modal-order-id');
 
+  const productsContainer = document.querySelector('.products');
+
   // --- Products data ---
   const products = [
     {
-      id: 'coins1000',
-      name: '1,000 Coins',
-      price: 10,
+      id: 'custom-drugs',
+      name: 'Custom Drugs (30)',
+      price: 30,
       img: 'https://i.imgur.com/GZNrBbW.png',
-      description: 'Buy big stacks for your grind. Delivered instantly.',
+      description: 'Special custom drug packs for your RP needs.',
       outOfStock: true,
     },
     {
-      id: 'glockdrum',
-      name: 'Glock Drum w/ Switch + Beam',
-      price: 10,
+      id: 'custom-clothing',
+      name: '4 Piece Custom Clothing',
+      price: 15,
       img: 'https://i.imgur.com/GZNrBbW.png',
-      description: 'Upgrade your street loadout. No cap.',
+      description: 'Get your exclusive custom clothing set.',
       outOfStock: true,
     },
     {
-      id: 'blueglock',
-      name: 'Blue Glock w/ Switch (2 pcs + 10k Ammo)',
-      price: 5,
+      id: 'personal-gun',
+      name: 'Custom Personal Gun',
+      price: 50,
       img: 'https://i.imgur.com/GZNrBbW.png',
-      description: 'Clean & custom for your RP grind.',
+      description: 'Fully personalized gun for your character.',
+      outOfStock: true,
+    },
+    {
+      id: 'coins-5k',
+      name: '5,000 Coins',
+      price: 50,
+      img: 'https://i.imgur.com/GZNrBbW.png',
+      description: 'Boost your gameplay with 5k coins.',
+      outOfStock: true,
+    },
+    {
+      id: 'coins-4k',
+      name: '4,000 Coins',
+      price: 40,
+      img: 'https://i.imgur.com/GZNrBbW.png',
+      description: 'Boost your gameplay with 4k coins.',
+      outOfStock: true,
+    },
+    {
+      id: 'coins-3k',
+      name: '3,000 Coins',
+      price: 30,
+      img: 'https://i.imgur.com/GZNrBbW.png',
+      description: 'Boost your gameplay with 3k coins.',
+      outOfStock: true,
+    },
+    {
+      id: 'coins-2k',
+      name: '2,000 Coins',
+      price: 20,
+      img: 'https://i.imgur.com/GZNrBbW.png',
+      description: 'Boost your gameplay with 2k coins.',
       outOfStock: true,
     }
   ];
@@ -520,9 +540,9 @@
 
   let currentUser = null; // username string
 
+  // --- Render products to page ---
   function renderProducts() {
-    const container = document.querySelector('.products');
-    container.innerHTML = ''; // clear
+    productsContainer.innerHTML = ''; // clear
 
     products.forEach(product => {
       const card = document.createElement('div');
@@ -541,7 +561,7 @@
       card.appendChild(img);
 
       const h2 = document.createElement('h2');
-      h2.innerHTML = product.name + ' – $' + product.price;
+      h2.innerHTML = `${product.name} – $${product.price}`;
       card.appendChild(h2);
 
       const p = document.createElement('p');
@@ -549,7 +569,7 @@
       card.appendChild(p);
 
       const btn = document.createElement('button');
-      btn.textContent = product.outOfStock ? 'Add to Cart' : 'Add to Cart';
+      btn.textContent = 'Add to Cart';
       btn.disabled = product.outOfStock;
       btn.className = 'buy-button' + (product.outOfStock ? '' : ' enabled');
       btn.setAttribute('aria-label', `Add ${product.name} to cart`);
@@ -559,7 +579,7 @@
       });
 
       card.appendChild(btn);
-      container.appendChild(card);
+      productsContainer.appendChild(card);
     });
   }
 
@@ -593,7 +613,7 @@
   function updateCartUI() {
     // update cart icon count
     const totalQty = cart.reduce((acc, item) => acc + item.qty, 0);
-    cartIcon.textContent = totalQty;
+    cartCountSpan.textContent = totalQty;
 
     // update cart panel items list
     if (cart.length === 0) {
@@ -738,7 +758,11 @@
 
   // Init
   renderProducts();
-
 </script>
+
 </body>
 </html>
+
+
+ 
+   
