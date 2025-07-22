@@ -2,80 +2,158 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cali Side RP Store</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('your-bg-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      text-align: center;
+    }
+    .logo {
+      font-size: 2em;
+      font-weight: bold;
+    }
+    .discord-link {
+      margin-top: 10px;
+    }
+    .discord-link a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 1.1em;
+    }
+    .search-bar {
+      text-align: center;
+      margin: 20px;
+    }
+    .search-bar input {
+      padding: 10px;
+      width: 50%;
+      font-size: 1em;
+      border-radius: 5px;
+      border: none;
+    }
+    .store {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .item {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+    .item img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .item button {
+      margin-top: 10px;
+      padding: 10px 15px;
+      background-color: #00bfff;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .cart {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      padding: 10px 15px;
+      border-radius: 10px;
+    }
+  </style>
+  <script>
+    function searchItems() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const items = document.getElementsByClassName("item");
+      Array.from(items).forEach(item => {
+        const title = item.getElementsByTagName("h3")[0].textContent.toLowerCase();
+        item.style.display = title.includes(input) ? "block" : "none";
+      });
+    }
+  </script>
 </head>
 <body>
   <header>
-    <h1>🛒 Cali Side RP Store</h1>
-    <p>2025 CaliSide City RP — Join our <a href="https://discord.gg/FkqyasFRAs" target="_blank">Discord</a></p>
-    <div class="cart-icon">🛍️ <span id="cart-count">0</span></div>
+    <div class="logo">Cali Side RP Store 🛒</div>
+    <div class="discord-link">
+      <a href="https://discord.gg/FkqyasFRAs" target="_blank">Join our Discord 💬</a>
+    </div>
   </header>
 
-  <main>
-    <input type="text" id="search-bar" placeholder="🔎 Search items..." />
+  <div class="cart">🛒 Cart (0)</div>
 
-    <section class="store-items">
-      <div class="item" data-name="Custom Clothing">
-        👕 <h3>Custom Clothing</h3>
-        <p>$15</p>
-        <button onclick="addToCart('Custom Clothing')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="Custom Drugs">
-        💊 <h3>Custom Drugs (4 pcs)</h3>
-        <p>$30</p>
-        <button onclick="addToCart('Custom Drugs')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="Personal Gun">
-        🔫 <h3>Custom Personal Gun</h3>
-        <p>$50</p>
-        <button onclick="addToCart('Personal Gun')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="2K Coins">
-        🪙 <h3>2K Coins</h3>
-        <p>$20</p>
-        <button onclick="addToCart('2K Coins')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="3K Coins">
-        🪙 <h3>3K Coins</h3>
-        <p>$30</p>
-        <button onclick="addToCart('3K Coins')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="4K Coins">
-        🪙 <h3>4K Coins</h3>
-        <p>$40</p>
-        <button onclick="addToCart('4K Coins')">Add to Cart</button>
-      </div>
-      <div class="item" data-name="5K Coins">
-        🪙 <h3>5K Coins</h3>
-        <p>$50</p>
-        <button onclick="addToCart('5K Coins')">Add to Cart</button>
-      </div>
-    </section>
-  </main>
+  <div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="searchItems()" placeholder="🔍 Search store items...">
+  </div>
 
-  <script>
-    let cartCount = 0;
-    const cartEl = document.getElementById('cart-count');
-
-    function addToCart(item) {
-      cartCount++;
-      cartEl.textContent = cartCount;
-      alert(`✅ ${item} added to cart! Join our Discord with your Order ID: https://discord.gg/FkqyasFRAs`);
-    }
-
-    document.getElementById('search-bar').addEventListener('input', function () {
-      const query = this.value.toLowerCase();
-      document.querySelectorAll('.item').forEach(item => {
-        const name = item.dataset.name.toLowerCase();
-        item.style.display = name.includes(query) ? 'block' : 'none';
-      });
-    });
-  </script>
-
+  <section class="store">
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="Blue Glock">
+      <h3>🔫 Blue Glock Switch (2) + 10K Ammo</h3>
+      <p>💵 $10 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="Custom Drug">
+      <h3>💊 Custom Drug (4 Pieces)</h3>
+      <p>💵 $30 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="Custom Clothing">
+      <h3>👕 Custom Clothing</h3>
+      <p>💵 $15 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="Personal Gun">
+      <h3>🔫 Custom Personal Gun</h3>
+      <p>💵 $50 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="5K Coins">
+      <h3>🪙 5K Coins</h3>
+      <p>💵 $50 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="4K Coins">
+      <h3>🪙 4K Coins</h3>
+      <p>💵 $40 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="3K Coins">
+      <h3>🪙 3K Coins</h3>
+      <p>💵 $30 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+    <div class="item">
+      <img src="https://imgur.com/vpZMJmz.png" alt="2K Coins">
+      <h3>🪙 2K Coins</h3>
+      <p>💵 $20 — Out of Stock</p>
+      <button disabled>Out of Stock</button>
+    </div>
+  </section>
 </body>
 </html>
+
 
 
  
