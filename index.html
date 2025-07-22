@@ -1,23 +1,9 @@
-Ah, you want the **top-right floating cart panel** like before — not the big cart section in the middle. My bad for changing it.
-
-I’ll give you the full working site with:
-
-* The **search bar** at the top,
-* The **floating cart icon & panel in top-right** with item count and total,
-* All items **Out of Stock** (disabled add to cart),
-* Your login overlay unchanged,
-* The cart panel toggles open/close when you click the cart icon,
-* The cart updates live with added items (but since out of stock, the buttons won't add, just alert).
-
-Here’s the full updated code with your requested **top-right floating cart** style:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CaliSide City RP Store with Floating Cart & Login</title>
+<title>CaliSide City RP Store with Working Login & Cart</title>
 <style>
   * {
     box-sizing: border-box;
@@ -356,12 +342,14 @@ Here’s the full updated code with your requested **top-right floating cart** s
     </header>
 
     <!-- Login overlay -->
-    <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title" aria-describedby="login-desc">
       <h2 id="login-title">Login to CaliSide City RP Store</h2>
+      <p id="login-desc" style="color:#ccc; margin-bottom:20px;">
+        Enter your username and password to login or register (no owner secret needed).
+      </p>
       <input type="text" id="username" placeholder="Enter username" aria-label="Username" autocomplete="username" />
       <input type="password" id="password" placeholder="Enter password" aria-label="Password" autocomplete="current-password" />
       <button id="login-btn">Login / Register</button>
-      <small>No owner secret required, just use your chosen password.</small>
       <div id="blur-message" role="alert" aria-live="assertive"></div>
     </div>
 
@@ -372,7 +360,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
 
     <!-- Products -->
     <section class="products" aria-label="Products for sale" id="products-section">
-      <div class="card">
+      <div class="card" data-name="1k coins" data-price="10">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="1K Coins" />
         <h2>💰 1K Coins – $10</h2>
@@ -380,7 +368,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="glock drum" data-price="10">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Glock Drum" />
         <h2>🔫 Glock Drum w/ Switch + Beam – $10</h2>
@@ -388,7 +376,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="blue glock" data-price="5">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Blue Glock" />
         <h2>🔵 Blue Glock w/ Switch (2 pcs + 10k Ammo) – $5</h2>
@@ -396,7 +384,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="custom drug" data-price="30">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Custom Drug" />
         <h2>💊 Custom Drug – $30</h2>
@@ -404,7 +392,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="custom clothing" data-price="15">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Custom Clothing" />
         <h2>👕 Custom Clothing – $15</h2>
@@ -412,7 +400,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="personal gun" data-price="50">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Personal Gun" />
         <h2>🔫 Personal Gun – $50</h2>
@@ -420,7 +408,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="5k coins" data-price="50">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="5K Coins" />
         <h2>💰 5K Coins – $50</h2>
@@ -428,7 +416,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="4k coins" data-price="40">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="4K Coins" />
         <h2>💰 4K Coins – $40</h2>
@@ -436,7 +424,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="3k coins" data-price="30">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="3K Coins" />
         <h2>💰 3K Coins – $30</h2>
@@ -444,7 +432,7 @@ Here’s the full updated code with your requested **top-right floating cart** s
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <div class="card">
+      <div class="card" data-name="2k coins" data-price="20">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="2K Coins" />
         <h2>💰 2K Coins – $20</h2>
@@ -461,14 +449,14 @@ Here’s the full updated code with your requested **top-right floating cart** s
     </footer>
 
     <!-- Floating cart button -->
-    <button id="cart-button" aria-label="Toggle shopping cart">
+    <button id="cart-button" aria-label="Toggle shopping cart" aria-haspopup="true" aria-expanded="false" aria-controls="cart-panel">
       🛒<span id="cart-count" aria-live="polite" aria-atomic="true">0</span>
     </button>
 
     <!-- Floating cart panel -->
-    <aside id="cart-panel" role="region" aria-label="Shopping cart contents" tabindex="-1">
+    <aside id="cart-panel" role="region" aria-label="Shopping cart contents" tabindex="-1" aria-hidden="true">
       <h3>Your Cart</h3>
-      <ul id="cart-items">
+      <ul id="cart-items" aria-live="polite" aria-relevant="additions removals">
         <li>No items yet.</li>
       </ul>
       <p id="total-price">Total: $0</p>
@@ -490,5 +478,155 @@ Here’s the full updated code with your requested **top-right floating cart** s
   const productsSection = document.getElementById('products-section');
 
   const cartButton = document.getElementById('cart-button');
-  const cartPanel = document.getElementBy
-```
+  const cartPanel = document.getElementById('cart-panel');
+  const cartCount = document.getElementById('cart-count');
+  const cartItemsList = document.getElementById('cart-items');
+  const totalPriceEl = document.getElementById('total-price');
+  const checkoutBtn = document.getElementById('checkout-btn');
+  const orderMessage = document.getElementById('order-message');
+
+  // Simple user accounts in localStorage:
+  // {username: {password: '...', loggedIn: true}}
+  // For demo, stored as 'caliUsers' JSON string
+  function loadUsers() {
+    const json = localStorage.getItem('caliUsers');
+    return json ? JSON.parse(json) : {};
+  }
+  function saveUsers(users) {
+    localStorage.setItem('caliUsers', JSON.stringify(users));
+  }
+  let users = loadUsers();
+
+  // Current logged user:
+  let currentUser = localStorage.getItem('caliCurrentUser') || null;
+
+  // If user is logged in, hide overlay:
+  function updateLoginState() {
+    if (currentUser && users[currentUser]) {
+      blurOverlay.style.display = 'none';
+      document.getElementById('app').style.filter = 'none';
+      searchInput.disabled = false;
+      // Enable buy buttons? But all out of stock so no need
+    } else {
+      blurOverlay.style.display = 'flex';
+      document.getElementById('app').style.filter = 'blur(6px)';
+      searchInput.disabled = true;
+    }
+  }
+
+  updateLoginState();
+
+  loginBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+      blurMessage.textContent = 'Please enter username and password.';
+      return;
+    }
+
+    // Check if user exists
+    if (users[username]) {
+      // Check password
+      if (users[username].password === password) {
+        // Login success
+        currentUser = username;
+        localStorage.setItem('caliCurrentUser', currentUser);
+        blurMessage.textContent = 'Logged in successfully!';
+        updateLoginState();
+      } else {
+        blurMessage.textContent = 'Incorrect password.';
+      }
+    } else {
+      // Register new user
+      users[username] = { password: password };
+      saveUsers(users);
+      currentUser = username;
+      localStorage.setItem('caliCurrentUser', currentUser);
+      blurMessage.textContent = 'Account created and logged in!';
+      updateLoginState();
+    }
+  });
+
+  // Search filtering:
+  searchInput.addEventListener('input', e => {
+    const val = e.target.value.toLowerCase();
+    const cards = productsSection.querySelectorAll('.card');
+    let anyVisible = false;
+    cards.forEach(card => {
+      const name = card.getAttribute('data-name');
+      if (name.includes(val)) {
+        card.style.display = '';
+        anyVisible = true;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    if (!anyVisible) {
+      productsSection.innerHTML = '<p style="color:#bbb; font-style:italic; text-align:center;">No items match your search.</p>';
+    } else {
+      // Restore original cards if previously replaced
+      if (productsSection.querySelector('p') && productsSection.querySelector('p').textContent.includes('No items')) {
+        location.reload(); // simple quick fix to restore all if search clears
+      }
+    }
+  });
+
+  // Cart logic
+  let cart = [];
+
+  function updateCartUI() {
+    cartCount.textContent = cart.length;
+    if (cart.length === 0) {
+      cartItemsList.innerHTML = '<li>No items yet.</li>';
+      totalPriceEl.textContent = 'Total: $0';
+      checkoutBtn.disabled = true;
+    } else {
+      cartItemsList.innerHTML = '';
+      let total = 0;
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} x${item.qty}`;
+        const price = item.price * item.qty;
+        const priceSpan = document.createElement('span');
+        priceSpan.textContent = `$${price}`;
+        li.appendChild(priceSpan);
+        cartItemsList.appendChild(li);
+        total += price;
+      });
+      totalPriceEl.textContent = `Total: $${total}`;
+      checkoutBtn.disabled = false;
+    }
+  }
+
+  // Toggle cart panel
+  cartButton.addEventListener('click', () => {
+    if (cartPanel.style.display === 'flex') {
+      cartPanel.style.display = 'none';
+      cartButton.setAttribute('aria-expanded', 'false');
+      cartPanel.setAttribute('aria-hidden', 'true');
+    } else {
+      cartPanel.style.display = 'flex';
+      cartButton.setAttribute('aria-expanded', 'true');
+      cartPanel.setAttribute('aria-hidden', 'false');
+      cartPanel.focus();
+    }
+  });
+
+  // Since all items are out of stock, disable Add to Cart buttons and alert
+  const buyButtons = document.querySelectorAll('.buy-button');
+  buyButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      alert('Sorry, all items are currently out of stock.');
+    });
+  });
+
+  // Checkout button alert
+  checkoutBtn.addEventListener('click', () => {
+    alert('Checkout feature is not implemented yet.');
+  });
+
+})();
+</script>
+</body>
+</html>
