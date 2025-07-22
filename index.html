@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CaliSide City RP Store with Login & Preview</title>
+<title>CaliSide City RP Store with Login & Cart</title>
 <style>
   * {
     box-sizing: border-box;
@@ -215,46 +215,45 @@
     background: #005fbb;
   }
   /* Cart section */
-  .cart {
+  #cart {
     margin: 0 auto 40px;
-    max-width: 480px;
+    max-width: 500px;
     background: rgba(25,25,25,0.9);
     padding: 28px 30px;
     border-radius: 14px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    color: #00aaff;
   }
-  .cart h3 {
+  #cart h3 {
     font-size: 2rem;
     margin-bottom: 20px;
     text-align: center;
-    color: #00aaff;
   }
-  #cart-items {
-    max-height: 220px;
+  #cart ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
     overflow-y: auto;
-    background: #111;
-    padding: 15px 20px;
-    border-radius: 10px;
-    color: #ddd;
-    font-size: 1.1rem;
-    line-height: 1.5;
   }
-  #cart-items div {
+  #cart ul li {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #007bff44;
+    padding-bottom: 6px;
   }
-  #total {
-    font-size: 1.6rem;
+  #total-price {
     font-weight: 700;
-    margin-top: 20px;
+    font-size: 1.5rem;
     text-align: right;
-    color: #00d8ff;
+    margin-top: 20px;
   }
-  .checkout-button {
-    margin-top: 28px;
-    background: #007bff;
+  #checkout-btn {
+    margin-top: 30px;
     width: 100%;
+    background: #007bff;
     border: none;
     padding: 16px 0;
     font-size: 1.3rem;
@@ -264,131 +263,25 @@
     cursor: pointer;
     transition: background 0.3s ease;
   }
-  .checkout-button:disabled {
+  #checkout-btn:disabled {
     background: #555;
     color: #bbb;
     cursor: not-allowed;
   }
-  .checkout-button:hover:not(:disabled) {
+  #checkout-btn:hover:not(:disabled) {
     background: #005fbb;
   }
-  /* Testimonials */
-  #testimonial-section {
-    max-width: 680px;
-    margin: 0 auto 40px;
-    background: rgba(20,20,20,0.9);
-    padding: 20px 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  }
-  #testimonial-section h3 {
-    color: #00aaff;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  #testimonial-text {
-    min-height: 80px;
-    margin-bottom: 14px;
-    font-size: 1.1rem;
-  }
-  #testimonials-list {
-    max-height: 180px;
-    overflow-y: auto;
-    background: #111;
-    padding: 12px 16px;
-    border-radius: 10px;
-    color: #ddd;
-    font-size: 1rem;
-    line-height: 1.4;
-  }
-  #testimonials-list div {
-    margin-bottom: 12px;
-    border-bottom: 1px solid #007bff33;
-    padding-bottom: 8px;
-  }
-  /* Modal */
-  #modal-overlay {
-    display:none;
-    position:fixed;
-    z-index:100;
-    left:0; top:0; right:0; bottom:0;
-    background:rgba(0,0,0,0.75);
-    backdrop-filter:blur(4px);
-    align-items:center;
-    justify-content:center;
-  }
-  #modal {
-    background:#222;
-    padding:32px 28px;
-    border-radius:16px;
-    box-shadow:0 0 30px #00aaffaa;
-    max-width:400px;
-    color:#0ff;
-    text-align:center;
-  }
-  #modal h2 {
-    margin-top:0;
-    margin-bottom:16px;
-    font-size:2rem;
-    color:#00ccff;
-  }
-  #modal p {
-    font-size:1.2rem;
-    margin-bottom:24px;
-  }
-  #modal button {
-    background:#00aaff;
-    border:none;
-    padding:12px 24px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:1.1rem;
-    color:white;
-    cursor:pointer;
-    transition:background 0.3s ease;
-  }
-  #modal button:hover {
-    background:#008fcc;
-  }
-  footer {
-    margin-top: 60px;
-    padding: 20px;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #777;
-    letter-spacing: 1.2px;
-  }
-  a {
-    color: #00aaff;
-    text-decoration: underline;
-  }
   /* Scrollbars */
-  #cart-items::-webkit-scrollbar,
-  #testimonials-list::-webkit-scrollbar {
+  #cart ul::-webkit-scrollbar {
     width: 8px;
   }
-  #cart-items::-webkit-scrollbar-track,
-  #testimonials-list::-webkit-scrollbar-track {
+  #cart ul::-webkit-scrollbar-track {
     background: #111;
   }
-  #cart-items::-webkit-scrollbar-thumb,
-  #testimonials-list::-webkit-scrollbar-thumb {
+  #cart ul::-webkit-scrollbar-thumb {
     background: #007bffaa;
     border-radius: 6px;
   }
-  /* Responsive */
-  @media (max-width: 480px) {
-    header h1 {
-      font-size: 2.4rem;
-    }
-    #dashboard-section {
-      max-width: 90vw;
-    }
-    .cart {
-      max-width: 90vw;
-    }
-  }
-
   /* Search bar styles */
   #search-bar {
     margin-bottom: 24px;
@@ -408,6 +301,18 @@
     outline: none;
     box-shadow: 0 0 10px #007bffaa;
   }
+  footer {
+    margin-top: 60px;
+    padding: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+    letter-spacing: 1.2px;
+  }
+  a {
+    color: #00aaff;
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
@@ -418,27 +323,31 @@
       <p>🔥 All items currently out of stock — stay tuned for restocks!</p>
     </header>
 
-    <!-- User Dashboard -->
-    <section id="dashboard-section" aria-label="User Dashboard">
+    <!-- Login overlay -->
+    <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <h2 id="login-title">Login to CaliSide City RP Store</h2>
+      <input type="text" id="username" placeholder="Enter username" aria-label="Username" autocomplete="username" />
+      <input type="password" id="password" placeholder="Enter password" aria-label="Password" autocomplete="current-password" />
+      <button id="login-btn">Login / Register</button>
+      <small>No owner secret required, just use your chosen password.</small>
+      <div id="blur-message" role="alert" aria-live="assertive"></div>
+    </div>
+
+    <!-- Dashboard section -->
+    <section id="dashboard-section" aria-label="User Dashboard" style="display:none;">
       <h2>Welcome, <span id="user-display"></span>!</h2>
       <button id="logout-btn">Logout</button>
 
-      <div class="cart" aria-label="Shopping cart">
+      <!-- Cart -->
+      <div id="cart" aria-label="Shopping cart">
         <h3>🛒 Your Cart</h3>
-        <div id="cart-items">No items yet.</div>
-        <p id="total">Total: $0</p>
-
-        <div id="promo-section" aria-label="Promo code section">
-          <label for="promo-code-input">🎟️ Promo Code (coming soon):</label>
-          <input type="text" id="promo-code-input" placeholder="Enter code" aria-label="Promo code" disabled />
-          <button id="apply-promo-btn" disabled>Apply</button>
-          <div id="promo-message" role="alert" aria-live="polite"></div>
-        </div>
-
-        <button class="checkout-button" id="checkout-btn" disabled>Checkout</button>
-        <div id="order-result" aria-live="polite"></div>
+        <ul id="cart-items">
+          <li>No items yet.</li>
+        </ul>
+        <p id="total-price">Total: $0</p>
+        <button id="checkout-btn" disabled>Checkout</button>
+        <div id="order-message" aria-live="polite" style="margin-top:15px; color:#0f0;"></div>
       </div>
-
     </section>
 
     <!-- Search bar -->
@@ -538,23 +447,6 @@
 
   </div>
 
-  <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title">
-    <h2 id="login-title">Login to CaliSide City RP Store</h2>
-    <input type="text" id="username" placeholder="Enter username" aria-label="Username" autocomplete="username" />
-    <input type="password" id="password" placeholder="Enter password" aria-label="Password" autocomplete="current-password" />
-    <button id="login-btn">Login</button>
-    <small>No owner secret required, just use your chosen password.</small>
-    <div id="blur-message" role="alert" aria-live="assertive"></div>
-  </div>
-
-  <div id="modal-overlay" role="alertdialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-    <div id="modal">
-      <h2 id="modal-title">Order Status</h2>
-      <p id="modal-desc">Thank you for your order!</p>
-      <button id="modal-close-btn" aria-label="Close order status dialog">Close</button>
-    </div>
-  </div>
-
 <script>
 (() => {
   const blurOverlay = document.getElementById('blur-overlay');
@@ -569,16 +461,12 @@
   const productsSection = document.getElementById('products-section');
   const searchInput = document.getElementById('search-input');
 
-  const cartItemsDiv = document.getElementById('cart-items');
-  const totalPriceEl = document.getElementById('total');
+  const cartList = document.getElementById('cart-items');
+  const totalPriceEl = document.getElementById('total-price');
   const checkoutBtn = document.getElementById('checkout-btn');
-  const orderResult = document.getElementById('order-result');
+  const orderMessage = document.getElementById('order-message');
 
-  const modalOverlay = document.getElementById('modal-overlay');
-  const modalCloseBtn = document.getElementById('modal-close-btn');
-  const modalDesc = document.getElementById('modal-desc');
-
-  // Products data, keys must match order in DOM
+  // Products data
   const products = [
     { name: "1K Coins", price: 10 },
     { name: "Glock Drum w/ Switch + Beam", price: 10 },
@@ -592,83 +480,46 @@
     { name: "2K Coins", price: 20 },
   ];
 
-  // All stock is zero/out of stock
+  // Stock (all zero = out of stock)
   const stock = products.map(() => 0);
 
   let cart = [];
 
-  // Utility - save users to localStorage
   function saveUsers(users) {
     localStorage.setItem('users', JSON.stringify(users));
   }
-  // Utility - load users from localStorage
   function loadUsers() {
     const users = localStorage.getItem('users');
     return users ? JSON.parse(users) : {};
   }
-  // Reset all users and passwords (call in console)
   window.resetUsers = () => {
     localStorage.removeItem('users');
     alert('All users and passwords reset!');
   };
 
-  // Get logged in user from sessionStorage
   function getLoggedInUser() {
     return sessionStorage.getItem('loggedInUser');
   }
-  // Set logged in user to sessionStorage
   function setLoggedInUser(username) {
     sessionStorage.setItem('loggedInUser', username);
   }
-  // Clear logged in user
   function clearLoggedInUser() {
     sessionStorage.removeItem('loggedInUser');
   }
 
-  function updateCartDisplay() {
-    if (cart.length === 0) {
-      cartItemsDiv.textContent = 'No items yet.';
-      totalPriceEl.textContent = 'Total: $0';
-      checkoutBtn.disabled = true;
-      return;
-    }
-    cartItemsDiv.innerHTML = '';
-    let total = 0;
-    cart.forEach(({ index, quantity }) => {
-      const prod = products[index];
-      const div = document.createElement('div');
-      div.textContent = `${prod.name} x${quantity}`;
-      const priceSpan = document.createElement('span');
-      priceSpan.textContent = `$${prod.price * quantity}`;
-      div.appendChild(priceSpan);
-      cartItemsDiv.appendChild(div);
-      total += prod.price * quantity;
-    });
-    totalPriceEl.textContent = `Total: $${total}`;
-    checkoutBtn.disabled = false;
+  function showDashboard(username) {
+    userDisplay.textContent = username;
+    dashboardSection.style.display = 'block';
   }
 
-  function clearCart() {
-    cart = [];
-    updateCartDisplay();
+  // On page load check login
+  const loggedInUser = getLoggedInUser();
+  if (loggedInUser) {
+    blurOverlay.style.display = 'none';
+    showDashboard(loggedInUser);
+  } else {
+    blurOverlay.style.display = 'flex';
   }
-
-  function filterProducts(query) {
-    query = query.trim().toLowerCase();
-    const cards = productsSection.querySelectorAll('.card');
-    cards.forEach((card, i) => {
-      const title = card.querySelector('h2').textContent.toLowerCase();
-      if (title.includes(query)) {
-        card.style.display = '';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  }
-
-  searchInput.addEventListener('input', e => {
-    filterProducts(e.target.value);
-  });
 
   loginBtn.addEventListener('click', () => {
     const username = usernameInput.value.trim();
@@ -680,14 +531,14 @@
     }
     const users = loadUsers();
     if (!users[username]) {
-      // New user - register
+      // Register new user
       users[username] = password;
       saveUsers(users);
       setLoggedInUser(username);
       blurOverlay.style.display = 'none';
       showDashboard(username);
     } else {
-      // Existing user - check password
+      // Check password
       if (users[username] === password) {
         setLoggedInUser(username);
         blurOverlay.style.display = 'none';
@@ -702,38 +553,84 @@
     clearLoggedInUser();
     blurOverlay.style.display = 'flex';
     dashboardSection.style.display = 'none';
-    clearCart();
+    cart = [];
+    updateCart();
+    orderMessage.textContent = '';
   });
 
-  // Show dashboard UI and update username display
-  function showDashboard(username) {
-    userDisplay.textContent = username;
-    dashboardSection.style.display = 'block';
-  }
-
-  // On page load - check logged in user
-  const loggedInUser = getLoggedInUser();
-  if (loggedInUser) {
-    blurOverlay.style.display = 'none';
-    showDashboard(loggedInUser);
-  } else {
-    blurOverlay.style.display = 'flex';
-  }
-
-  // Add to cart logic - but disabled since all out of stock
-  // This site has no active buy buttons since out of stock
-  // If you enable stock, you can add event listeners here
-
-  // Modal close
-  modalCloseBtn.addEventListener('click', () => {
-    modalOverlay.style.display = 'none';
+  // Search filter
+  searchInput.addEventListener('input', e => {
+    const query = e.target.value.trim().toLowerCase();
+    const cards = productsSection.querySelectorAll('.card');
+    cards.forEach((card, i) => {
+      const title = card.querySelector('h2').textContent.toLowerCase();
+      card.style.display = title.includes(query) ? '' : 'none';
+    });
   });
 
-  // Accessibility focus trap could be added here if needed
+  // Update cart display
+  function updateCart() {
+    if (cart.length === 0) {
+      cartList.innerHTML = '<li>No items yet.</li>';
+      totalPriceEl.textContent = 'Total: $0';
+      checkoutBtn.disabled = true;
+      return;
+    }
+    cartList.innerHTML = '';
+    let total = 0;
+    cart.forEach(({ index, qty }) => {
+      const product = products[index];
+      const li = document.createElement('li');
+      li.textContent = `${product.name} x${qty}`;
+      const priceSpan = document.createElement('span');
+      priceSpan.textContent = `$${product.price * qty}`;
+      li.appendChild(priceSpan);
+      cartList.appendChild(li);
+      total += product.price * qty;
+    });
+    totalPriceEl.textContent = `Total: $${total}`;
+    checkoutBtn.disabled = false;
+  }
+
+  // Add to cart handler
+  function addToCart(index) {
+    if (stock[index] === 0) {
+      alert('Sorry, this item is out of stock.');
+      return;
+    }
+    const cartIndex = cart.findIndex(item => item.index === index);
+    if (cartIndex > -1) {
+      cart[cartIndex].qty++;
+    } else {
+      cart.push({ index, qty: 1 });
+    }
+    updateCart();
+  }
+
+  // Since all stock zero, disable buy buttons but show them
+  // For demonstration, I enable add to cart but show alert on click
+  const buyButtons = productsSection.querySelectorAll('.buy-button');
+  buyButtons.forEach((btn, i) => {
+    btn.disabled = false;
+    btn.classList.add('enabled');
+    btn.addEventListener('click', () => {
+      if (stock[i] === 0) {
+        alert('Sorry, this item is out of stock.');
+        return;
+      }
+      addToCart(i);
+    });
+  });
+
+  // Checkout button click
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length === 0) return;
+    orderMessage.textContent = 'Order placed! Thank you for your purchase.';
+    cart = [];
+    updateCart();
+  });
 
 })();
 </script>
-
 </body>
 </html>
-
