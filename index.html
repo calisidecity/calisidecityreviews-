@@ -3,105 +3,111 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CaliSide City RP Store</title>
+  <title>CaliSide City RP</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: url('https://i.imgur.com/GZNrBbW.jpg') no-repeat center center fixed;
+      background: url('https://imgur.com/GZNrBbW.png') no-repeat center center fixed;
       background-size: cover;
       color: white;
+      text-align: center;
     }
     header {
-      background-color: rgba(0, 0, 0, 0.6);
       padding: 20px;
-      text-align: center;
-      font-size: 24px;
+      background-color: rgba(0, 0, 0, 0.7);
     }
     a {
-      color: #00bfff;
+      color: #00aaff;
+      text-decoration: none;
+    }
+    a:hover {
       text-decoration: underline;
     }
-    .store {
+    .container {
       padding: 20px;
-      backdrop-filter: blur(8px);
     }
     .item {
-      border: 1px solid white;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .item img {
-      max-width: 100px;
-      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      margin: 10px;
+      padding: 15px;
     }
     .search-bar {
-      margin: 10px 0;
-      padding: 10px;
-      width: 100%;
-      max-width: 400px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
+      margin: 20px;
     }
-    .hidden { display: none; }
+    .search-bar input {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 5px;
+      border: none;
+    }
   </style>
 </head>
 <body>
   <header>
-    2025 CaliSide City RP — <a href="https://discord.gg/FkqyasFRAs" target="_blank">Join our Discord</a>
+    <h1>2025 CaliSide City RP</h1>
+    <p>Join our Discord: <a href="https://discord.gg/FkqyasFRAs" target="_blank">https://discord.gg/FkqyasFRAs</a></p>
   </header>
-
-  <div class="store">
-    <input type="text" id="search" class="search-bar" placeholder="Search items..." />
-    <div id="items"></div>
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search for an item..." onkeyup="filterItems()">
   </div>
-
+  <div class="container" id="store">
+    <div class="item" data-name="1M Coins">
+      <h2>💰 1M Coins — $15</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="Blue Glock Switch">
+      <h2>🔫 Blue Glock Switch (x2 + 10K Ammo) — $10</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="Standard Glock">
+      <h2>🔫 Standard Glock — $5</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="Custom Drug">
+      <h2>💊 Custom Drug (4 Piece) — $30</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="Custom Clothing">
+      <h2>👕 Custom Clothing — $15</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="Personal Gun">
+      <h2>🔧 Custom Personal Gun — $50</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="5K Coins">
+      <h2>💰 5K Coins — $50</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="4K Coins">
+      <h2>💰 4K Coins — $40</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="3K Coins">
+      <h2>💰 3K Coins — $30</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+    <div class="item" data-name="2K Coins">
+      <h2>💰 2K Coins — $20</h2>
+      <p>🔥 Out of Stock</p>
+    </div>
+  </div>
   <script>
-    // RESET all stored users and logins
-    localStorage.clear();
-
-    const storeItems = [
-      { name: "1M Coins", price: "$15", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "Glock Drum w/ Switch & Beam", price: "$10", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "Standard Blue Glock", price: "$5", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "Custom Drug Pack (4pc)", price: "$30", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "Custom Clothing", price: "$15", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "Personal Gun", price: "$50", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "5K Coins", price: "$50", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "4K Coins", price: "$40", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "3K Coins", price: "$30", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-      { name: "2K Coins", price: "$20", stock: 0, img: "https://i.imgur.com/GZNrBbW.jpg" },
-    ];
-
-    const container = document.getElementById('items');
-
-    function renderItems(items) {
-      container.innerHTML = '';
-      items.forEach(item => {
-        const el = document.createElement('div');
-        el.className = 'item';
-        el.innerHTML = `
-          <h3>${item.name}</h3>
-          <img src="${item.img}" />
-          <p>Price: ${item.price}</p>
-          <p>Status: ${item.stock === 0 ? 'Out of Stock' : 'In Stock'}</p>
-          <button ${item.stock === 0 ? 'disabled' : ''}>Add to Cart</button>
-        `;
-        container.appendChild(el);
+    function filterItems() {
+      const input = document.getElementById("search").value.toLowerCase();
+      const items = document.querySelectorAll(".item");
+      items.forEach((item) => {
+        const name = item.getAttribute("data-name").toLowerCase();
+        if (name.includes(input)) {
+          item.style.display = "block";
+        } else {
+          item.style.display = "none";
+        }
       });
     }
-
-    renderItems(storeItems);
-
-    // Search filter
-    document.getElementById('search').addEventListener('input', (e) => {
-      const val = e.target.value.toLowerCase();
-      const filtered = storeItems.filter(i => i.name.toLowerCase().includes(val));
-      renderItems(filtered);
-    });
   </script>
 </body>
 </html>
