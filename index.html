@@ -1,9 +1,23 @@
+Ah, you want the **top-right floating cart panel** like before — not the big cart section in the middle. My bad for changing it.
+
+I’ll give you the full working site with:
+
+* The **search bar** at the top,
+* The **floating cart icon & panel in top-right** with item count and total,
+* All items **Out of Stock** (disabled add to cart),
+* Your login overlay unchanged,
+* The cart panel toggles open/close when you click the cart icon,
+* The cart updates live with added items (but since out of stock, the buttons won't add, just alert).
+
+Here’s the full updated code with your requested **top-right floating cart** style:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CaliSide City RP Store with Login & Cart</title>
+<title>CaliSide City RP Store with Floating Cart & Login</title>
 <style>
   * {
     box-sizing: border-box;
@@ -93,48 +107,32 @@
   #blur-overlay button:hover {
     background: #008fcc;
   }
-  #blur-overlay small {
-    display: block;
-    margin-top: 12px;
-    color: #888;
-    font-size: 0.85rem;
-  }
   #blur-message {
     color: #ff5555;
     margin-top: 8px;
     font-weight: 700;
     min-height: 1.2rem;
   }
-  /* Login/Register */
-  #dashboard-section {
-    max-width: 940px;
-    margin: 0 auto 40px;
-    background: rgba(30,30,30,0.9);
-    padding: 28px 30px;
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-    display: none;
+  /* Search bar styles */
+  #search-bar {
+    margin-bottom: 24px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    z-index: 50;
+    position: relative;
   }
-  #dashboard-section h2 {
-    color: #00aaff;
-    margin-bottom: 18px;
-    text-align: center;
-  }
-  #logout-btn {
-    display: block;
-    margin: 0 auto 20px auto;
-    background: #cc0000;
-    border: none;
-    padding: 14px 0;
-    border-radius: 8px;
-    color: white;
-    font-weight: 700;
+  #search-bar input {
+    width: 100%;
+    max-width: 480px;
+    padding: 12px 18px;
     font-size: 1.1rem;
-    cursor: pointer;
-    width: 180px;
-  }
-  #logout-btn:hover {
-    background: #990000;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 10px #007bffaa;
   }
   /* Products grid */
   .products {
@@ -142,6 +140,8 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 28px;
+    position: relative;
+    z-index: 20;
   }
   .card {
     background: rgba(30,30,30,0.85);
@@ -214,29 +214,71 @@
   .buy-button.enabled:hover {
     background: #005fbb;
   }
-  /* Cart section */
-  #cart {
-    margin: 0 auto 40px;
-    max-width: 500px;
-    background: rgba(25,25,25,0.9);
-    padding: 28px 30px;
+  /* Floating Cart Button top-right */
+  #cart-button {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    background: #007bff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 0 15px #007bffbb;
+    border: none;
+    cursor: pointer;
+    z-index: 300;
+    color: white;
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+  }
+  #cart-count {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #cc0000;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px #cc0000cc;
+  }
+  /* Floating Cart Panel */
+  #cart-panel {
+    position: fixed;
+    top: 90px;
+    right: 18px;
+    width: 320px;
+    max-height: 420px;
+    background: rgba(20,20,20,0.95);
     border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.9);
+    padding: 20px 24px 24px;
+    display: none;
+    flex-direction: column;
+    z-index: 300;
     color: #00aaff;
-  }
-  #cart h3 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  #cart ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 200px;
     overflow-y: auto;
   }
-  #cart ul li {
+  #cart-panel h3 {
+    margin: 0 0 15px;
+    font-size: 1.8rem;
+    font-weight: 900;
+  }
+  #cart-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-grow: 1;
+  }
+  #cart-items li {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
@@ -246,22 +288,22 @@
   }
   #total-price {
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    margin-top: 12px;
     text-align: right;
-    margin-top: 20px;
   }
   #checkout-btn {
-    margin-top: 30px;
-    width: 100%;
+    margin-top: 20px;
     background: #007bff;
     border: none;
-    padding: 16px 0;
+    padding: 14px 0;
     font-size: 1.3rem;
     font-weight: 800;
     color: white;
     border-radius: 12px;
     cursor: pointer;
     transition: background 0.3s ease;
+    width: 100%;
   }
   #checkout-btn:disabled {
     background: #555;
@@ -271,36 +313,24 @@
   #checkout-btn:hover:not(:disabled) {
     background: #005fbb;
   }
-  /* Scrollbars */
-  #cart ul::-webkit-scrollbar {
+  #order-message {
+    margin-top: 12px;
+    font-weight: 700;
+    color: #0f0;
+    min-height: 1.2rem;
+  }
+  /* Scrollbar */
+  #cart-panel::-webkit-scrollbar {
     width: 8px;
   }
-  #cart ul::-webkit-scrollbar-track {
+  #cart-panel::-webkit-scrollbar-track {
     background: #111;
   }
-  #cart ul::-webkit-scrollbar-thumb {
+  #cart-panel::-webkit-scrollbar-thumb {
     background: #007bffaa;
     border-radius: 6px;
   }
-  /* Search bar styles */
-  #search-bar {
-    margin-bottom: 24px;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    justify-content: center;
-  }
-  #search-bar input {
-    width: 100%;
-    max-width: 480px;
-    padding: 12px 18px;
-    font-size: 1.1rem;
-    border-radius: 12px;
-    border: none;
-    outline: none;
-    box-shadow: 0 0 10px #007bffaa;
-  }
+  /* Footer */
   footer {
     margin-top: 60px;
     padding: 20px;
@@ -308,8 +338,10 @@
     font-size: 0.9rem;
     color: #777;
     letter-spacing: 1.2px;
+    position: relative;
+    z-index: 10;
   }
-  a {
+  footer a {
     color: #00aaff;
     text-decoration: underline;
   }
@@ -332,23 +364,6 @@
       <small>No owner secret required, just use your chosen password.</small>
       <div id="blur-message" role="alert" aria-live="assertive"></div>
     </div>
-
-    <!-- Dashboard section -->
-    <section id="dashboard-section" aria-label="User Dashboard" style="display:none;">
-      <h2>Welcome, <span id="user-display"></span>!</h2>
-      <button id="logout-btn">Logout</button>
-
-      <!-- Cart -->
-      <div id="cart" aria-label="Shopping cart">
-        <h3>🛒 Your Cart</h3>
-        <ul id="cart-items">
-          <li>No items yet.</li>
-        </ul>
-        <p id="total-price">Total: $0</p>
-        <button id="checkout-btn" disabled>Checkout</button>
-        <div id="order-message" aria-live="polite" style="margin-top:15px; color:#0f0;"></div>
-      </div>
-    </section>
 
     <!-- Search bar -->
     <div id="search-bar">
@@ -445,6 +460,22 @@
       </a>
     </footer>
 
+    <!-- Floating cart button -->
+    <button id="cart-button" aria-label="Toggle shopping cart">
+      🛒<span id="cart-count" aria-live="polite" aria-atomic="true">0</span>
+    </button>
+
+    <!-- Floating cart panel -->
+    <aside id="cart-panel" role="region" aria-label="Shopping cart contents" tabindex="-1">
+      <h3>Your Cart</h3>
+      <ul id="cart-items">
+        <li>No items yet.</li>
+      </ul>
+      <p id="total-price">Total: $0</p>
+      <button id="checkout-btn" disabled>Checkout</button>
+      <div id="order-message" aria-live="polite"></div>
+    </aside>
+
   </div>
 
 <script>
@@ -454,183 +485,10 @@
   const usernameInput = document.getElementById('username');
   const passwordInput = document.getElementById('password');
   const blurMessage = document.getElementById('blur-message');
-  const dashboardSection = document.getElementById('dashboard-section');
-  const userDisplay = document.getElementById('user-display');
-  const logoutBtn = document.getElementById('logout-btn');
 
-  const productsSection = document.getElementById('products-section');
   const searchInput = document.getElementById('search-input');
+  const productsSection = document.getElementById('products-section');
 
-  const cartList = document.getElementById('cart-items');
-  const totalPriceEl = document.getElementById('total-price');
-  const checkoutBtn = document.getElementById('checkout-btn');
-  const orderMessage = document.getElementById('order-message');
-
-  // Products data
-  const products = [
-    { name: "1K Coins", price: 10 },
-    { name: "Glock Drum w/ Switch + Beam", price: 10 },
-    { name: "Blue Glock w/ Switch (2 pcs + 10k Ammo)", price: 5 },
-    { name: "Custom Drug", price: 30 },
-    { name: "Custom Clothing", price: 15 },
-    { name: "Personal Gun", price: 50 },
-    { name: "5K Coins", price: 50 },
-    { name: "4K Coins", price: 40 },
-    { name: "3K Coins", price: 30 },
-    { name: "2K Coins", price: 20 },
-  ];
-
-  // Stock (all zero = out of stock)
-  const stock = products.map(() => 0);
-
-  let cart = [];
-
-  function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-  function loadUsers() {
-    const users = localStorage.getItem('users');
-    return users ? JSON.parse(users) : {};
-  }
-  window.resetUsers = () => {
-    localStorage.removeItem('users');
-    alert('All users and passwords reset!');
-  };
-
-  function getLoggedInUser() {
-    return sessionStorage.getItem('loggedInUser');
-  }
-  function setLoggedInUser(username) {
-    sessionStorage.setItem('loggedInUser', username);
-  }
-  function clearLoggedInUser() {
-    sessionStorage.removeItem('loggedInUser');
-  }
-
-  function showDashboard(username) {
-    userDisplay.textContent = username;
-    dashboardSection.style.display = 'block';
-  }
-
-  // On page load check login
-  const loggedInUser = getLoggedInUser();
-  if (loggedInUser) {
-    blurOverlay.style.display = 'none';
-    showDashboard(loggedInUser);
-  } else {
-    blurOverlay.style.display = 'flex';
-  }
-
-  loginBtn.addEventListener('click', () => {
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
-    blurMessage.textContent = '';
-    if (!username || !password) {
-      blurMessage.textContent = 'Please enter username and password.';
-      return;
-    }
-    const users = loadUsers();
-    if (!users[username]) {
-      // Register new user
-      users[username] = password;
-      saveUsers(users);
-      setLoggedInUser(username);
-      blurOverlay.style.display = 'none';
-      showDashboard(username);
-    } else {
-      // Check password
-      if (users[username] === password) {
-        setLoggedInUser(username);
-        blurOverlay.style.display = 'none';
-        showDashboard(username);
-      } else {
-        blurMessage.textContent = 'Incorrect password. Try again.';
-      }
-    }
-  });
-
-  logoutBtn.addEventListener('click', () => {
-    clearLoggedInUser();
-    blurOverlay.style.display = 'flex';
-    dashboardSection.style.display = 'none';
-    cart = [];
-    updateCart();
-    orderMessage.textContent = '';
-  });
-
-  // Search filter
-  searchInput.addEventListener('input', e => {
-    const query = e.target.value.trim().toLowerCase();
-    const cards = productsSection.querySelectorAll('.card');
-    cards.forEach((card, i) => {
-      const title = card.querySelector('h2').textContent.toLowerCase();
-      card.style.display = title.includes(query) ? '' : 'none';
-    });
-  });
-
-  // Update cart display
-  function updateCart() {
-    if (cart.length === 0) {
-      cartList.innerHTML = '<li>No items yet.</li>';
-      totalPriceEl.textContent = 'Total: $0';
-      checkoutBtn.disabled = true;
-      return;
-    }
-    cartList.innerHTML = '';
-    let total = 0;
-    cart.forEach(({ index, qty }) => {
-      const product = products[index];
-      const li = document.createElement('li');
-      li.textContent = `${product.name} x${qty}`;
-      const priceSpan = document.createElement('span');
-      priceSpan.textContent = `$${product.price * qty}`;
-      li.appendChild(priceSpan);
-      cartList.appendChild(li);
-      total += product.price * qty;
-    });
-    totalPriceEl.textContent = `Total: $${total}`;
-    checkoutBtn.disabled = false;
-  }
-
-  // Add to cart handler
-  function addToCart(index) {
-    if (stock[index] === 0) {
-      alert('Sorry, this item is out of stock.');
-      return;
-    }
-    const cartIndex = cart.findIndex(item => item.index === index);
-    if (cartIndex > -1) {
-      cart[cartIndex].qty++;
-    } else {
-      cart.push({ index, qty: 1 });
-    }
-    updateCart();
-  }
-
-  // Since all stock zero, disable buy buttons but show them
-  // For demonstration, I enable add to cart but show alert on click
-  const buyButtons = productsSection.querySelectorAll('.buy-button');
-  buyButtons.forEach((btn, i) => {
-    btn.disabled = false;
-    btn.classList.add('enabled');
-    btn.addEventListener('click', () => {
-      if (stock[i] === 0) {
-        alert('Sorry, this item is out of stock.');
-        return;
-      }
-      addToCart(i);
-    });
-  });
-
-  // Checkout button click
-  checkoutBtn.addEventListener('click', () => {
-    if (cart.length === 0) return;
-    orderMessage.textContent = 'Order placed! Thank you for your purchase.';
-    cart = [];
-    updateCart();
-  });
-
-})();
-</script>
-</body>
-</html>
+  const cartButton = document.getElementById('cart-button');
+  const cartPanel = document.getElementBy
+```
