@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CaliSide City RP - Player Reviews</title>
+<style>
+  /* Reset & basics */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0; min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #e0e7ff;
+    display: flex;
+    flex-direction: column;
+    background: 
+      linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)),
+      url('https://i.imgur.com/GZNrBbW.png') no-repeat center center fixed;
+    background-size: cover;
+  }
+
+  /* Container */
+  #app {
+    flex: 1;
+    max-width: 900px;
+    margin: 2rem auto 3rem;
+    padding: 0 1rem;
+    position: relative;
+    background: rgba(0, 10, 25, 0.7);
+    border-radius: 15px;
+    box-shadow: 0 0 40px #003366cc;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  header h1 {
+    font-size: 3.2rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #66ccff;
+    text-shadow: 0 0 10px #33aaff;
+    margin-bottom: 0.25rem;
+  }
+  header p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #99d6ffcc;
+  }
+
+  /* Login Overlay */
+  #login-overlay {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 150;
+  }
+  #login-box {
+    background: #004080;
+    padding: 2.5rem 3rem;
+    border-radius: 15px;
+    box-shadow: 0 0 40px #33aaffbb;
+    width: 320px;
+    color: #d0e8ff;
+    text-align: center;
+  }
+  #login-box h2 {
+    margin-bottom: 1rem;
+    font-weight: 900;
+    font-size: 2.2rem;
+    text-shadow: 0 0 8px #99d6ff;
+  }
+  #login-box input {
+    width: 100%;
+    padding: 14px 12px;
+    margin: 12px 0;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+  }
+  #login-box button {
+    margin-top: 18px;
+    width: 100%;
+    background: #3399ff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 18px #3399ffaa;
+    transition: background 0.3s ease;
+  }
+  #login-box button:hover {
+    background: #0077dd;
+  }
+  #login-message {
+    margin-top: 10px;
+    font-weight: 700;
+    min-height: 1.3rem;
+    color: #ff5555;
+  }
+  #login-switch {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: #aaddffcc;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* Review Form */
+  #review-form {
+    background: #00264ddd;
+    padding: 20px 28px 30px;
+    border-radius: 14px;
+    box-shadow: 0 0 28px #0055ccaa;
+    margin-bottom: 2rem;
+  }
+  #review-form h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #66ccff;
+    text-shadow: 0 0 10px #33aaff;
+  }
+  #review-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  #review-form textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px 14px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    resize: vertical;
+    background: #004080dd;
+    color: #ddf1ff;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  #review-form input[type="number"] {
+    width: 64px;
+    padding: 8px 10px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: none;
+    background: #004080dd;
+    color: #ddf1ff;
+    margin-bottom: 20px;
+  }
+  #review-form button {
+    background: #3399ff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 22px #3399ffbb;
+    transition: background 0.3s ease;
+    width: 100%;
+  }
+  #review-form button:hover {
+    background: #0077dd;
+  }
+
+  /* Reviews List */
+  #reviews-list {
+    max-height: 480px;
+    overflow-y: auto;
+    background: #003366cc;
+    padding: 18px 24px;
+    border-radius: 14px;
+    box-shadow: 0 0 26px #004dbbaa;
+  }
+  .review {
+    background: #004080cc;
+    padding: 16px 20px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: inset 0 0 10px #003366aa;
+    position: relative;
+  }
+  .review .user {
+    font-weight: 700;
+    color: #aaddff;
+    margin-bottom: 8px;
+  }
+  .review .date {
+    font-size: 0.85rem;
+    color: #99bbffcc;
+    position: absolute;
+    right: 16px;
+    top: 16px;
+  }
+  .review .stars {
+    margin-bottom: 8px;
+  }
+  .review .stars span {
+    color: #ffd500;
+    font-size: 1.3rem;
+    margin-right: 2px;
+  }
+  .review .text {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    color: #dceeff;
+  }
+  .review-actions {
+    margin-top: 10px;
+    text-align: right;
+  }
+  .review-actions button {
+    background: #005fa3;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #bbddff;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: background 0.3s ease;
+  }
+  .review-actions button:hover {
+    background: #00457d;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 1.4rem 1rem;
+    font-size: 1rem;
+    color: #66ccffaa;
+    background: #001a33;
+    box-shadow: inset 0 4px 14px #003366aa;
+  }
+  footer a {
+    color: #66ccff;
+    text-decoration: underline;
+  }
+
+  /* Scrollbar for reviews */
+  #reviews-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  #reviews-list::-webkit-scrollbar-track {
+    background: #002244;
+  }
+  #reviews-list::-webkit-scrollbar-thumb {
+    background: #3399ffcc;
+    border-radius: 6px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    #login-box {
+      width: 90vw;
+      padding: 1.8rem 2rem;
+    }
+    #app {
+      margin: 1rem auto 2rem;
+      padding: 0 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div id="app" role="main" aria-live="polite">
+    <header>
+      <h1>🗣️ CaliSide City RP</h1>
+      <p>Player Reviews & Testimonials</p>
+    </header>
+
+    <section id="review-form" aria-label="Submit a review">
+      <h3>Leave your review</h3>
+      <label for="review-rating">Rating (1 to 5 stars):</label>
+      <input type="number" id="review-rating" min="1" max="5" value="5" aria-required="true" />
+      <label for="review-text">Your review:</label>
+      <textarea id="review-text" placeholder="Tell us about your experience..." aria-required="true"></textarea>
+      <button id="submit-review">Submit Review</button>
+    </section>
+
+    <section id="reviews-list" aria-label="List of player reviews">
+      <!-- Reviews will be inserted here dynamically -->
+    </section>
+
+  </div>
+
+  <!-- Login Overlay -->
+  <div id="login-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title" aria-describedby="login-desc" >
+    <div id="login-box">
+      <h2 id="login-title">Sign In to CaliSide Reviews</h2>
+      <input type="text" id="login-username" placeholder="Username" aria-label="Username" autocomplete="username" />
+      <input type="password" id="login-password" placeholder="Password" aria-label="Password" autocomplete="current-password" />
+      <button id="login-btn">Sign In / Register</button>
+      <div id="login-message" aria-live="assertive"></div>
+      <div id="login-switch">Don't have an account? Just enter new username & password to register.</div>
+    </div>
+  </div>
+
+  <script>
+    // Elements
+    const loginOverlay = document.getElementById('login-overlay');
+    const loginUsername = document.getElementById('login-username');
+    const loginPassword = document.getElementById('login-password');
+    const loginBtn = document.getElementById('login-btn');
+    const loginMessage = document.getElementById('login-message');
+
+    const reviewForm = document.getElementById('review-form');
+    const reviewRating = document.getElementById('review-rating');
+    const reviewText = document.getElementById('review-text');
+    const submitReviewBtn = document.getElementById('submit-review');
+    const reviewsList = document.getElementById('reviews-list');
+
+    // Data storage keys
+    const USERS_KEY = 'csc_rp_review_users';
+    const REVIEWS_KEY = 'csc_rp_reviews';
+    const CURRENT_USER_KEY = 'csc_rp_review_currentUser';
+
+    // Load users & reviews from localStorage or initialize empty
+    let users = JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
+    let reviews = JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]');
+    let currentUser = localStorage.getItem(CURRENT_USER_KEY) || null;
+
+    // Utility to format dates nicely
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    // Render reviews
+    function renderReviews() {
+      if(reviews.length === 0) {
+        reviewsList.innerHTML = `<p style="text-align:center; color:#88bbffcc; font-style:italic;">No reviews yet. Be the first to share your experience!</p>`;
+        return;
+      }
+      // Sort by newest first
+      reviews.sort((a,b) => new Date(b.date) - new Date(a.date));
+      reviewsList.innerHTML = '';
+      reviews.forEach((r, i) => {
+        const div = document.createElement('div');
+        div.className = 'review';
+        div.setAttribute('data-index', i);
+        div.innerHTML = `
+          <div class="user">${escapeHtml(r.user)}</div>
+          <div class="date">${formatDate(r.date)}</div>
+          <div class="stars">${renderStars(r.rating)}</div>
+          <div class="text">${escapeHtml(r.text)}</div>
+          ${r.user === currentUser ? `
+            <div class="review-actions">
+              <button class="edit-btn" aria-label="Edit your review">Edit</button>
+              <button class="delete-btn" aria-label="Delete your review">Delete</button>
+            </div>
+          ` : ''}
+        `;
+        reviewsList.appendChild(div);
+      });
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Render stars from number
+    function renderStars(num) {
+      let stars = '';
+      for(let i = 0; i < 5; i++) {
+        stars += i < num ? '⭐' : '☆';
+      }
+      return stars;
+    }
+
+    // Login function
+    function login(username, password) {
+      if(username.length < 3) {
+        loginMessage.textContent = 'Username must be at least 3 characters.';
+        return false;
+      }
+      if(password.length < 5) {
+        loginMessage.textContent = 'Password must be at least 5 characters.';
+        return false;
+      }
+      if(users.hasOwnProperty(username)) {
+        if(users[username] !== password) {
+          loginMessage.textContent = 'Incorrect password.';
+          return false;
+        }
+        // Successful login
+        currentUser = username;
+        localStorage.setItem(CURRENT_USER_KEY, currentUser);
+        loginMessage.textContent = '';
+        return true;
+      } else {
+        // Register new user
+        users[username] = password;
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        currentUser = username;
+        localStorage.setItem(CURRENT_USER_KEY, currentUser);
+        loginMessage.textContent = '';
+        return true;
+      }
+    }
+
+    // Logout function (for future enhancement)
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem(CURRENT_USER_KEY);
+      location.reload();
+    }
+
+    // On login button click
+    loginBtn.addEventListener('click', () => {
+      const username = loginUsername.value.trim();
+      const password = loginPassword.value;
+      const ok = login(username, password);
+      if(ok) {
+        loginOverlay.style.display = 'none';
+        reviewForm.style.display = 'block';
+        renderReviews();
+      }
+    });
+
+    // Submit review handler
+    submitReviewBtn.addEventListener('click', () => {
+      if(!currentUser) {
+        alert('Please login first!');
+        return;
+      }
+      const rating = Number(reviewRating.value);
+      const text = reviewText.value.trim();
+
+      if(isNaN(rating) || rating < 1 || rating > 5) {
+        alert('Rating must be a number between 1 and 5.');
+        return;
+      }
+      if(text.length < 10) {
+        alert('Review text must be at least 10 characters.');
+        return;
+      }
+      // Add review
+      reviews.push({
+        user: currentUser,
+        rating: rating,
+        text: text,
+        date: new Date().toISOString()
+      });
+      localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+      reviewText.value = '';
+      reviewRating.value = 5;
+      renderReviews();
+      alert('Thanks for your review!');
+    });
+
+    // Delegate edit/delete buttons
+    reviewsList.addEventListener('click', (e) => {
+      if(!e.target.classList.contains('edit-btn') && !e.target.classList.contains('delete-btn')) return;
+      const reviewDiv = e.target.closest('.review');
+      const index = Number(reviewDiv.getAttribute('data-index'));
+      if(isNaN(index)) return;
+
+      if(e.target.classList.contains('delete-btn')) {
+        if(confirm('Are you sure you want to delete your review?')) {
+          reviews.splice(index, 1);
+          localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+          renderReviews();
+        }
+      }
+      else if(e.target.classList.contains('edit-btn')) {
+        const newText = prompt('Edit your review:', reviews[index].text);
+        if(newText !== null) {
+          if(newText.trim().length < 10) {
+            alert('Review must be at least 10 characters.');
+            return;
+          }
+          reviews[index].text = newText.trim();
+          reviews[index].date = new Date().toISOString(); // update date on edit
+          localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviews));
+          renderReviews();
+        }
+      }
+    });
+
+    // Initialize on load
+    window.addEventListener('load', () => {
+      if(currentUser && users.hasOwnProperty(currentUser)) {
+        loginOverlay.style.display = 'none';
+        reviewForm.style.display = 'block';
+        renderReviews();
+      } else {
+        loginOverlay.style.display = 'flex';
+        reviewForm.style.display = 'none';
+      }
+    });
+  </script>
+
+  <footer>
+    Join our community on <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener">Discord</a> for support & updates!
+  </footer>
+
+</body>
+</html>
