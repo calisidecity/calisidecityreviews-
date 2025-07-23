@@ -399,7 +399,48 @@
     <!-- Products -->
     <section class="products" aria-label="Products for sale">
 
-      <!-- Coins -->
+      <!-- Existing products (unchanged) -->
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/GZNrBbW.png" alt="Glock Drum" />
+        <h2>🔫 Glock Drum w/ Switch + Beam – $10</h2>
+        <p>Upgrade your street loadout. No cap.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/GZNrBbW.png" alt="Blue Glock" />
+        <h2>🔵 Blue Glock w/ Switch (2 pcs + 10k Ammo) – $5</h2>
+        <p>Clean & custom for your RP grind.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/GZNrBbW.png" alt="Custom Drug" />
+        <h2>💊 Custom Drug – $30</h2>
+        <p>Create your own custom drug to sell or use in RP.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/GZNrBbW.png" alt="4 Piece Custom Clothing" />
+        <h2>👕 4 Piece Custom Clothing – $15</h2>
+        <p>Get unique clothes made for your style.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/GZNrBbW.png" alt="Custom Personal Gun" />
+        <h2>🔫 Custom Personal Gun – $50</h2>
+        <p>Your personal custom gun, designed by you.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+
+      <!-- New coin bundles -->
       <div class="card">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="1,000 Coins" />
@@ -412,7 +453,7 @@
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="2,000 Coins" />
         <h2>💰 2,000 Coins – $20</h2>
-        <p>Get more coins to boost your gameplay.</p>
+        <p>More coins, more power.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
@@ -420,7 +461,7 @@
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="3,000 Coins" />
         <h2>💰 3,000 Coins – $30</h2>
-        <p>Big bundle for serious grinders.</p>
+        <p>Step up your game with 3,000 coins.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
@@ -428,7 +469,7 @@
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="4,000 Coins" />
         <h2>💰 4,000 Coins – $40</h2>
-        <p>Huge coin stack for your RP grind.</p>
+        <p>Huge coin pack for the dedicated.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
@@ -436,13 +477,12 @@
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="5,000 Coins" />
         <h2>💰 5,000 Coins – $50</h2>
-        <p>Get the ultimate coin bundle.</p>
+        <p>Big coin bundle for serious grinders.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
       <!-- Gang Tiers -->
       <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/CquoWEE.png" alt="Gang Tier 1" />
         <h2>🔥 Gang Tier 1 – $10</h2>
         <p>Access exclusive Gang Tier 1 items and perks.</p>
@@ -450,7 +490,6 @@
       </div>
 
       <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/CquoWEE.png" alt="Gang Tier 2" />
         <h2>🔥 Gang Tier 2 – $20</h2>
         <p>Access exclusive Gang Tier 2 items and perks.</p>
@@ -458,161 +497,231 @@
       </div>
 
       <div class="card">
-        <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/CquoWEE.png" alt="Gang Tier 3" />
         <h2>🔥 Gang Tier 3 – $30</h2>
         <p>Access exclusive Gang Tier 3 items and perks.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
-
+      
     </section>
 
   </div>
 
-  <!-- Cart icon top right -->
-  <div id="cart-icon" aria-label="Shopping cart" role="button" tabindex="0" title="Open Cart">
-    🛒<div id="cart-count" aria-live="polite" aria-atomic="true">0</div>
+  <!-- Cart Icon -->
+  <div id="cart-icon" role="button" aria-label="Open shopping cart" tabindex="0">
+    🛒 <span id="cart-count">0</span>
   </div>
 
-  <!-- Cart popup -->
-  <div id="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cart-popup-title">
+  <!-- Cart Popup -->
+  <div id="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cart-popup-title" tabindex="-1">
     <h3 id="cart-popup-title">Your Cart</h3>
-    <div id="cart-items" tabindex="0" aria-live="polite" aria-atomic="true">
-      <p>Your cart is empty.</p>
-    </div>
-    <div id="cart-total">Total: $0</div>
+    <div id="cart-items" aria-live="polite" aria-relevant="additions removals"></div>
+    <div id="cart-total">Total: $0.00</div>
     <button id="checkout-btn-popup" disabled>Checkout</button>
   </div>
 
+  <!-- Modal for purchase confirmation -->
+  <div id="modal-overlay" role="alertdialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
+    <div id="modal">
+      <h2 id="modal-title">Purchase Successful!</h2>
+      <p id="modal-desc">Thank you for your purchase. Please make a ticket on our Discord with your Order ID to claim your items.</p>
+      <button id="modal-close-btn">Close</button>
+    </div>
+  </div>
+
   <footer>
-    &copy; 2025 CaliSide RP — Join our Discord for support and updates: 
-    <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">
-      https://discord.gg/FkqyasFRAs
-    </a>
+    <p>© 2025 CaliSide RP — <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">Join our Discord</a></p>
   </footer>
 
 <script>
-  // Sample user data for demo
-  const mockUser = {
-    username: "PlayerOne",
-    loggedIn: false
-  };
+  // User session mock
+  const users = [
+    { username: 'user1', password: 'pass1' },
+    { username: 'player', password: 'password123' }
+  ];
+  let currentUser = null;
+
+  // Products data
+  const products = [
+    { id: 'glock-drum', name: 'Glock Drum w/ Switch + Beam', price: 10, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Upgrade your street loadout. No cap.' },
+    { id: 'blue-glock', name: 'Blue Glock w/ Switch (2 pcs + 10k Ammo)', price: 5, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Clean & custom for your RP grind.' },
+    { id: 'custom-drug', name: 'Custom Drug', price: 30, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Create your own custom drug to sell or use in RP.' },
+    { id: 'custom-clothing', name: '4 Piece Custom Clothing', price: 15, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Get unique clothes made for your style.' },
+    { id: 'custom-personal-gun', name: 'Custom Personal Gun', price: 50, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Your personal custom gun, designed by you.' },
+
+    // Coin bundles
+    { id: 'coins-1000', name: '1,000 Coins', price: 10, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Buy big stacks for your grind. Delivered instantly.' },
+    { id: 'coins-2000', name: '2,000 Coins', price: 20, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'More coins, more power.' },
+    { id: 'coins-3000', name: '3,000 Coins', price: 30, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Step up your game with 3,000 coins.' },
+    { id: 'coins-4000', name: '4,000 Coins', price: 40, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Huge coin pack for the dedicated.' },
+    { id: 'coins-5000', name: '5,000 Coins', price: 50, stock: 0, img: 'https://i.imgur.com/GZNrBbW.png', desc: 'Big coin bundle for serious grinders.' },
+
+    // Gang tiers
+    { id: 'gang-tier-1', name: 'Gang Tier 1', price: 10, stock: 0, img: 'https://i.imgur.com/CquoWEE.png', desc: 'Access exclusive Gang Tier 1 items and perks.' },
+    { id: 'gang-tier-2', name: 'Gang Tier 2', price: 20, stock: 0, img: 'https://i.imgur.com/CquoWEE.png', desc: 'Access exclusive Gang Tier 2 items and perks.' },
+    { id: 'gang-tier-3', name: 'Gang Tier 3', price: 30, stock: 0, img: 'https://i.imgur.com/CquoWEE.png', desc: 'Access exclusive Gang Tier 3 items and perks.' }
+  ];
 
   // Elements
-  const blurOverlay = document.createElement('div');
-  blurOverlay.id = 'blur-overlay';
-  blurOverlay.innerHTML = `
-    <h2>Login to Access the CaliSide RP Store</h2>
-    <input type="text" id="username-input" placeholder="Enter username" autocomplete="off" aria-label="Username"/>
-    <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" aria-label="Password"/>
-    <button id="login-btn">Login</button>
-    <div id="blur-message" role="alert" aria-live="assertive"></div>
-    <p style="margin-top:16px; font-size:0.9rem; color:#888;">Use any username and "password" to demo.</p>
-  `;
-  document.body.appendChild(blurOverlay);
-
-  const app = document.getElementById('app');
-  const userDisplay = document.getElementById('user-display');
-  const dashboard = document.getElementById('dashboard-section');
-  const loginBtn = document.getElementById('login-btn');
-  const logoutBtn = document.getElementById('logout-btn');
-  const usernameInput = document.getElementById('username-input');
-  const passwordInput = document.getElementById('password-input');
-  const blurMessage = document.getElementById('blur-message');
-
-  // Cart elements
   const cartIcon = document.getElementById('cart-icon');
   const cartCount = document.getElementById('cart-count');
   const cartPopup = document.getElementById('cart-popup');
-  const cartItemsDiv = document.getElementById('cart-items');
-  const cartTotalDiv = document.getElementById('cart-total');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartTotal = document.getElementById('cart-total');
   const checkoutBtn = document.getElementById('checkout-btn-popup');
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
+  const dashboardSection = document.getElementById('dashboard-section');
+  const userDisplay = document.getElementById('user-display');
+  const logoutBtn = document.getElementById('logout-btn');
 
-  // Product data (only showing out of stock so add to cart disabled)
-  const products = [
-    { id: 1, name: "1,000 Coins", price: 10, img: "https://i.imgur.com/GZNrBbW.png", description: "Buy big stacks for your grind.", inStock: false },
-    { id: 2, name: "2,000 Coins", price: 20, img: "https://i.imgur.com/GZNrBbW.png", description: "Get more coins to boost your gameplay.", inStock: false },
-    { id: 3, name: "3,000 Coins", price: 30, img: "https://i.imgur.com/GZNrBbW.png", description: "Big bundle for serious grinders.", inStock: false },
-    { id: 4, name: "4,000 Coins", price: 40, img: "https://i.imgur.com/GZNrBbW.png", description: "Huge coin stack for your RP grind.", inStock: false },
-    { id: 5, name: "5,000 Coins", price: 50, img: "https://i.imgur.com/GZNrBbW.png", description: "Get the ultimate coin bundle.", inStock: false },
-    { id: 6, name: "Gang Tier 1", price: 10, img: "https://i.imgur.com/CquoWEE.png", description: "Access exclusive Gang Tier 1 items and perks.", inStock: false },
-    { id: 7, name: "Gang Tier 2", price: 20, img: "https://i.imgur.com/CquoWEE.png", description: "Access exclusive Gang Tier 2 items and perks.", inStock: false },
-    { id: 8, name: "Gang Tier 3", price: 30, img: "https://i.imgur.com/CquoWEE.png", description: "Access exclusive Gang Tier 3 items and perks.", inStock: false }
-  ];
+  let cart = [];
 
-  // For this demo, cart and login system disabled to keep it simple since items are out of stock
+  // Show login overlay if no user
+  function showLoginOverlay() {
+    const blurOverlay = document.createElement('div');
+    blurOverlay.id = 'blur-overlay';
+    blurOverlay.innerHTML = `
+      <h2>Login to CaliSide RP Store</h2>
+      <input type="text" id="username" placeholder="Username" autocomplete="username" aria-label="Username" />
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" aria-label="Password" />
+      <button id="login-btn">Login</button>
+      <div id="blur-message" aria-live="assertive"></div>
+    `;
+    document.body.appendChild(blurOverlay);
 
-  // Login function
-  function login() {
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value;
+    const loginBtn = document.getElementById('login-btn');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const blurMessage = document.getElementById('blur-message');
 
-    if (!username) {
-      blurMessage.textContent = "Please enter a username.";
-      return;
-    }
-    if (password !== "password") {
-      blurMessage.textContent = "Incorrect password.";
-      return;
-    }
+    loginBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value;
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        currentUser = user;
+        userDisplay.textContent = currentUser.username;
+        blurOverlay.remove();
+        dashboardSection.style.display = 'block';
+        renderProducts();
+        updateCartCount();
+      } else {
+        blurMessage.textContent = 'Invalid username or password.';
+      }
+    });
 
-    mockUser.username = username;
-    mockUser.loggedIn = true;
-
-    blurOverlay.style.display = "none";
-    app.style.filter = "none";
-    dashboard.style.display = "block";
-    userDisplay.textContent = username;
-    blurMessage.textContent = "";
+    passwordInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        loginBtn.click();
+      }
+    });
   }
 
-  loginBtn.addEventListener('click', login);
-  passwordInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') login();
-  });
-  usernameInput.addEventListener('keypress', e => {
-    if (e.key === 'Enter') passwordInput.focus();
-  });
+  function renderProducts() {
+    // Buttons remain disabled because stock is 0 (out of stock)
+    // If you want to enable based on stock > 0, you can update here
+  }
 
-  // Logout
-  logoutBtn.addEventListener('click', () => {
-    mockUser.loggedIn = false;
-    mockUser.username = "";
-    blurOverlay.style.display = "flex";
-    app.style.filter = "blur(6px)";
-    dashboard.style.display = "none";
-    usernameInput.value = "";
-    passwordInput.value = "";
-    blurMessage.textContent = "";
-  });
+  function updateCartCount() {
+    cartCount.textContent = cart.length;
+    checkoutBtn.disabled = cart.length === 0;
+  }
 
-  // On page load, blur app and show login
-  window.onload = () => {
-    if (!mockUser.loggedIn) {
-      blurOverlay.style.display = "flex";
-      app.style.filter = "blur(6px)";
-    } else {
-      blurOverlay.style.display = "none";
-      dashboard.style.display = "block";
-      userDisplay.textContent = mockUser.username;
+  function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    cart.push(product);
+    updateCartCount();
+    renderCart();
+  }
+
+  function renderCart() {
+    cartItemsContainer.innerHTML = '';
+    if (cart.length === 0) {
+      cartItemsContainer.textContent = 'Your cart is empty.';
+      cartTotal.textContent = 'Total: $0.00';
+      return;
     }
-  };
+    let total = 0;
+    cart.forEach((item, index) => {
+      total += item.price;
+      const div = document.createElement('div');
+      div.textContent = `${item.name} - $${item.price}`;
+      cartItemsContainer.appendChild(div);
+    });
+    cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+  }
 
-  // Cart toggle
+  function openCart() {
+    if (!currentUser) return alert('Please login first.');
+    renderCart();
+    cartPopup.style.display = 'flex';
+    cartPopup.focus();
+  }
+
+  function closeCart() {
+    cartPopup.style.display = 'none';
+  }
+
+  function checkout() {
+    if (cart.length === 0) return;
+    // Simulate order creation
+    const orderId = 'CS' + Date.now();
+    closeCart();
+    cart = [];
+    updateCartCount();
+
+    // Show modal with instructions
+    modalOverlay.querySelector('p').textContent = `Thank you for your purchase. Your Order ID is ${orderId}. Please make a ticket on our Discord with this Order ID to claim your items.`;
+    modalOverlay.style.display = 'flex';
+    modalOverlay.focus();
+  }
+
+  // Event listeners
   cartIcon.addEventListener('click', () => {
     if (cartPopup.style.display === 'flex') {
-      cartPopup.style.display = 'none';
+      closeCart();
     } else {
-      cartPopup.style.display = 'flex';
+      openCart();
     }
   });
-
-  cartIcon.addEventListener('keypress', (e) => {
-    if (e.key === "Enter" || e.key === " ") {
+  cartIcon.addEventListener('keypress', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       cartIcon.click();
     }
   });
+  checkoutBtn.addEventListener('click', checkout);
+  modalCloseBtn.addEventListener('click', () => {
+    modalOverlay.style.display = 'none';
+  });
+  logoutBtn.addEventListener('click', () => {
+    currentUser = null;
+    dashboardSection.style.display = 'none';
+    showLoginOverlay();
+    cart = [];
+    updateCartCount();
+  });
+
+  // Add click handlers for buy buttons (currently all disabled due to stock 0)
+  document.querySelectorAll('.buy-button.enabled').forEach(button => {
+    button.addEventListener('click', e => {
+      if (!currentUser) {
+        alert('Please login to buy items.');
+        return;
+      }
+      const productId = e.target.closest('.card').querySelector('h2').textContent.split(' – ')[0];
+      // Find product by name
+      const product = products.find(p => p.name === productId);
+      if (product) {
+        addToCart(product.id);
+      }
+    });
+  });
+
+  // Initial load
+  showLoginOverlay();
 
 </script>
 </body>
