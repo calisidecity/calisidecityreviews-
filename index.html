@@ -34,7 +34,7 @@
   }
   header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
   }
   header h1 {
     font-size: 3rem;
@@ -46,6 +46,22 @@
   header p {
     font-size: 1.2rem;
     color: #bbb;
+  }
+  /* Search bar */
+  #search-bar {
+    max-width: 400px;
+    margin: 0 auto 30px auto;
+    display: flex;
+    justify-content: center;
+  }
+  #search-input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.1rem;
+    outline: none;
+    box-shadow: 0 0 12px #00aaffaa;
   }
   /* Blur overlay for locked view */
   #blur-overlay {
@@ -208,32 +224,37 @@
   .buy-button.enabled:hover {
     background: #005fbb;
   }
-  /* Cart icon */
+  /* Cart icon (circle style) */
   #cart-icon {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    bottom: 25px;
+    right: 25px;
     background: #007bffcc;
-    padding: 10px 14px;
-    border-radius: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
     color: white;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.6rem;
     cursor: pointer;
     z-index: 300;
     display: flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 0 10px #007bffaa;
+    justify-content: center;
+    box-shadow: 0 0 15px #007bffaa;
   }
   #cart-count {
+    position: absolute;
+    top: 4px;
+    right: 4px;
     background: #ff4444;
     border-radius: 50%;
-    padding: 4px 9px;
-    font-size: 1rem;
+    padding: 3px 7px;
+    font-size: 0.85rem;
     color: white;
     font-weight: 900;
     user-select: none;
+    box-shadow: 0 0 8px #cc0000bb;
   }
   /* Cart popup */
   #cart-popup {
@@ -385,6 +406,11 @@
       <p>🔥 All items currently out of stock — stay tuned for restocks!</p>
     </header>
 
+    <!-- Search bar -->
+    <div id="search-bar">
+      <input type="text" id="search-input" placeholder="Search products..." aria-label="Search products" />
+    </div>
+
     <!-- User Dashboard -->
     <section id="dashboard-section" aria-label="User Dashboard">
       <h2>Welcome, <span id="user-display"></span>!</h2>
@@ -392,7 +418,7 @@
     </section>
 
     <!-- Products -->
-    <section class="products" aria-label="Products for sale">
+    <section class="products" aria-label="Products for sale" id="products-section">
 
       <div class="card">
         <span class="out-of-stock">Out of Stock</span>
@@ -418,8 +444,6 @@
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
-      <!-- New products -->
-
       <div class="card">
         <span class="out-of-stock">Out of Stock</span>
         <img src="https://i.imgur.com/GZNrBbW.png" alt="Custom Drug" />
@@ -443,8 +467,6 @@
         <p>Your personal custom gun, designed by you.</p>
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
-
-      <!-- Coin bundles -->
 
       <div class="card">
         <span class="out-of-stock">Out of Stock</span>
@@ -478,260 +500,203 @@
         <button class="buy-button" disabled>Add to Cart</button>
       </div>
 
+      <!-- Gang tiers added -->
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/NRRbNUg.png" alt="Gang Tier 1" />
+        <h2>🔥 Gang Tier 1 – $12</h2>
+        <p>Unlock special gang perks and RP benefits.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/NRRbNUg.png" alt="Gang Tier 2" />
+        <h2>🔥 Gang Tier 2 – $22</h2>
+        <p>Upgraded gang status with exclusive features.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
+      <div class="card">
+        <span class="out-of-stock">Out of Stock</span>
+        <img src="https://i.imgur.com/NRRbNUg.png" alt="Gang Tier 3" />
+        <h2>🔥 Gang Tier 3 – $45</h2>
+        <p>Top tier gang membership with full benefits.</p>
+        <button class="buy-button" disabled>Add to Cart</button>
+      </div>
     </section>
 
     <!-- Cart icon -->
-    <div id="cart-icon" aria-label="Shopping Cart" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
-      🛒 Cart <span id="cart-count" aria-live="polite" aria-atomic="true">0</span>
+    <div id="cart-icon" aria-label="Shopping Cart" role="button" tabindex="0">
+      🛒<div id="cart-count" aria-live="polite" aria-atomic="true">0</div>
     </div>
 
     <!-- Cart popup -->
-    <div id="cart-popup" role="region" aria-label="Shopping Cart Details">
-      <h3>Your Cart</h3>
-      <div id="cart-items">Your cart is empty.</div>
-      <div id="cart-total">Total: $0</div>
+    <div id="cart-popup" role="dialog" aria-modal="true" aria-labelledby="cart-popup-title" tabindex="-1">
+      <h3 id="cart-popup-title">Your Cart</h3>
+      <div id="cart-items" aria-live="polite" aria-relevant="additions removals"></div>
+      <div id="cart-total" aria-live="polite"></div>
       <button id="checkout-btn-popup" disabled>Checkout</button>
     </div>
 
-    <footer>
-      2025 CaliSide City RP — Join our Discord: <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">https://discord.gg/FkqyasFRAs</a>
-    </footer>
-
-  </div>
-
-  <!-- Modal for order ID -->
-  <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc">
-    <div id="modal">
-      <h2 id="modal-title">✅ Order Complete!</h2>
-      <p id="modal-desc">
-        Please send this Order ID in a ticket on our Discord for fast delivery:<br/><br/>
-        <strong id="modal-order-id" style="word-break: break-word;">CSCRP-XXXXXXX</strong>
-      </p>
-      <button onclick="closeModal()">Close</button>
+    <!-- Modal for checkout -->
+    <div id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+      <div id="modal">
+        <h2 id="modal-title">Thank you for your order!</h2>
+        <p>Your order has been submitted successfully. Please make a ticket on Discord to complete your purchase.</p>
+        <button id="modal-close-btn">Close</button>
+      </div>
     </div>
-  </div>
 
-  <!-- Login overlay -->
-  <div id="blur-overlay" role="dialog" aria-modal="true" aria-labelledby="login-title" aria-describedby="login-desc">
-    <h2 id="login-title">Login / Register</h2>
-    <input type="text" id="login-username" placeholder="Choose a username (min 3 chars)" aria-label="Username" autocomplete="username" />
-    <input type="password" id="login-password" placeholder="Set your password (min 5 chars)" aria-label="Password" autocomplete="current-password" />
-    <button id="login-btn">Login / Register</button>
-    <div id="blur-message" role="alert" aria-live="assertive"></div>
-    <small style="color:#0099ff; margin-top: 12px;">
-      Your username and password are saved in your browser.<br/>
-      No secret codes, just create your own password.
-    </small>
+    <footer>
+      &copy; 2025 CaliSide RP — Visit our <a href="https://discord.gg/FkqyasFRAs" target="_blank" rel="noopener noreferrer">Discord</a> for support.
+    </footer>
   </div>
 
 <script>
-  // Simple user data saved in localStorage
-  let users = JSON.parse(localStorage.getItem('csc_rp_users') || '{}');
-  let currentUser = localStorage.getItem('csc_rp_currentUser') || null;
-
-  const blurOverlay = document.getElementById('blur-overlay');
-  const loginBtn = document.getElementById('login-btn');
-  const loginUsername = document.getElementById('login-username');
-  const loginPassword = document.getElementById('login-password');
-  const blurMessage = document.getElementById('blur-message');
-  const dashboardSection = document.getElementById('dashboard-section');
+  // User login simulation (no backend)
   const userDisplay = document.getElementById('user-display');
+  const dashboardSection = document.getElementById('dashboard-section');
   const logoutBtn = document.getElementById('logout-btn');
+  const blurOverlay = document.createElement('div');
+  blurOverlay.id = 'blur-overlay';
 
-  const appDiv = document.getElementById('app');
+  blurOverlay.innerHTML = `
+    <h2>Login to CaliSide RP Store</h2>
+    <input type="text" id="username" placeholder="Enter username" aria-label="Username" autocomplete="username" />
+    <input type="password" id="password" placeholder="Enter password" aria-label="Password" autocomplete="current-password" />
+    <button id="login-btn">Login</button>
+    <div id="blur-message" role="alert" aria-live="assertive"></div>
+  `;
+
+  document.body.appendChild(blurOverlay);
+
+  const loginBtn = document.getElementById('login-btn');
+  const blurMessage = document.getElementById('blur-message');
+
+  loginBtn.addEventListener('click', () => {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if(username === '' || password === '') {
+      blurMessage.textContent = 'Please enter username and password.';
+      return;
+    }
+    // Simulated check (any non-empty username/password)
+    localStorage.setItem('csrpUser', username);
+    loginSuccess(username);
+  });
+
+  function loginSuccess(username) {
+    blurOverlay.style.display = 'none';
+    dashboardSection.style.display = 'block';
+    userDisplay.textContent = username;
+    document.getElementById('app').style.filter = 'none';
+  }
+
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('csrpUser');
+    location.reload();
+  });
+
+  // Check if logged in on page load
+  window.addEventListener('load', () => {
+    const loggedUser = localStorage.getItem('csrpUser');
+    if(loggedUser) {
+      loginSuccess(loggedUser);
+    }
+  });
+
+  // Product and cart handling
+  const productsSection = document.getElementById('products-section');
   const cartIcon = document.getElementById('cart-icon');
-  const cartCountSpan = document.getElementById('cart-count');
+  const cartCount = document.getElementById('cart-count');
   const cartPopup = document.getElementById('cart-popup');
-  const cartItemsDiv = document.getElementById('cart-items');
-  const cartTotalDiv = document.getElementById('cart-total');
-  const checkoutBtn = document.getElementById('checkout-btn-popup');
-
+  const cartItemsContainer = document.getElementById('cart-items');
+  const cartTotal = document.getElementById('cart-total');
+  const checkoutBtnPopup = document.getElementById('checkout-btn-popup');
   const modalOverlay = document.getElementById('modal-overlay');
-  const modalOrderId = document.getElementById('modal-order-id');
+  const modalCloseBtn = document.getElementById('modal-close-btn');
 
-  // Products data (all out of stock)
-  const products = [
-    { id: 'coins_1000', name: '1,000 Coins', price: 10, stock: 0 },
-    { id: 'glock_drum', name: 'Glock Drum w/ Switch + Beam', price: 10, stock: 0 },
-    { id: 'blue_glock', name: 'Blue Glock w/ Switch (2 pcs + 10k Ammo)', price: 5, stock: 0 },
-
-    { id: 'custom_drug', name: 'Custom Drug', price: 30, stock: 0 },
-    { id: 'custom_clothing', name: '4 Piece Custom Clothing', price: 15, stock: 0 },
-    { id: 'custom_gun', name: 'Custom Personal Gun', price: 50, stock: 0 },
-
-    { id: 'coins_5000', name: '5,000 Coins', price: 50, stock: 0 },
-    { id: 'coins_4000', name: '4,000 Coins', price: 40, stock: 0 },
-    { id: 'coins_3000', name: '3,000 Coins', price: 30, stock: 0 },
-    { id: 'coins_2000', name: '2,000 Coins', price: 20, stock: 0 },
-  ];
-
-  // Cart data saved in localStorage keyed by username
   let cart = {};
 
-  // Load cart from localStorage per user
-  function loadCart() {
-    if(!currentUser) return;
-    cart = JSON.parse(localStorage.getItem(`csc_rp_cart_${currentUser}`) || '{}');
-    updateCartUI();
-  }
-
-  // Save cart to localStorage per user
-  function saveCart() {
-    if(!currentUser) return;
-    localStorage.setItem(`csc_rp_cart_${currentUser}`, JSON.stringify(cart));
-  }
-
-  // Update cart icon count and popup content
-  function updateCartUI() {
-    let count = 0;
-    let total = 0;
-    cartItemsDiv.innerHTML = '';
-    if(Object.keys(cart).length === 0) {
-      cartItemsDiv.textContent = 'Your cart is empty.';
-      checkoutBtn.disabled = true;
+  function updateCartCount() {
+    let totalCount = Object.values(cart).reduce((acc, c) => acc + c.qty, 0);
+    cartCount.textContent = totalCount;
+    if(totalCount === 0) {
+      cartCount.style.display = 'none';
+      checkoutBtnPopup.disabled = true;
+      cartTotal.textContent = '';
     } else {
-      for(const pid in cart) {
-        let product = products.find(p => p.id === pid);
-        if(!product) continue;
-        let qty = cart[pid];
-        count += qty;
-        total += qty * product.price;
-
-        let itemDiv = document.createElement('div');
-        itemDiv.textContent = `${product.name} x${qty}`;
-        let priceSpan = document.createElement('span');
-        priceSpan.textContent = `$${(qty * product.price).toFixed(2)}`;
-        itemDiv.appendChild(priceSpan);
-        cartItemsDiv.appendChild(itemDiv);
-      }
-      checkoutBtn.disabled = false;
+      cartCount.style.display = 'block';
+      checkoutBtnPopup.disabled = false;
     }
-    cartCountSpan.textContent = count;
-    cartTotalDiv.textContent = `Total: $${total.toFixed(2)}`;
   }
 
-  // Toggle cart popup
+  function renderCart() {
+    cartItemsContainer.innerHTML = '';
+    let totalPrice = 0;
+    for(let key in cart) {
+      const { title, price, qty } = cart[key];
+      const line = document.createElement('div');
+      line.textContent = `${title} x${qty} - $${(price * qty).toFixed(2)}`;
+      cartItemsContainer.appendChild(line);
+      totalPrice += price * qty;
+    }
+    cartTotal.textContent = `Total: $${totalPrice.toFixed(2)}`;
+  }
+
+  // Buy button clicks
+  productsSection.querySelectorAll('.card').forEach(card => {
+    const buyBtn = card.querySelector('.buy-button');
+    if(buyBtn.classList.contains('enabled')) {
+      buyBtn.addEventListener('click', () => {
+        const title = card.querySelector('h2').textContent;
+        const priceMatch = title.match(/\$(\d+(\.\d+)?)/);
+        let price = priceMatch ? parseFloat(priceMatch[1]) : 0;
+        if(cart[title]) {
+          cart[title].qty++;
+        } else {
+          cart[title] = { title, price, qty: 1 };
+        }
+        updateCartCount();
+        renderCart();
+      });
+    }
+  });
+
+  // Cart icon toggle popup
   cartIcon.addEventListener('click', () => {
-    if(cartPopup.style.display === 'flex') {
-      cartPopup.style.display = 'none';
-      cartIcon.setAttribute('aria-expanded', 'false');
-    } else {
-      cartPopup.style.display = 'flex';
-      cartIcon.setAttribute('aria-expanded', 'true');
-    }
+    cartPopup.style.display = cartPopup.style.display === 'flex' ? 'none' : 'flex';
   });
 
-  // Close modal function
-  function closeModal() {
-    modalOverlay.style.display = 'none';
-  }
-  window.closeModal = closeModal;
-
-  // Logout function
-  logoutBtn.addEventListener('click', () => {
-    currentUser = null;
-    localStorage.removeItem('csc_rp_currentUser');
+  // Checkout
+  checkoutBtnPopup.addEventListener('click', () => {
+    cartPopup.style.display = 'none';
+    modalOverlay.style.display = 'flex';
     cart = {};
-    blurOverlay.style.display = 'flex';
-    dashboardSection.style.display = 'none';
-    appDiv.style.filter = 'blur(6px)';
+    updateCartCount();
+    renderCart();
   });
 
-  // Show dashboard with user info
-  function showDashboard() {
-    userDisplay.textContent = currentUser;
-    dashboardSection.style.display = 'block';
-    blurOverlay.style.display = 'none';
-    appDiv.style.filter = 'none';
-    loadCart();
-  }
-
-  // Login/register logic
-  loginBtn.addEventListener('click', () => {
-    const username = loginUsername.value.trim();
-    const password = loginPassword.value;
-
-    blurMessage.textContent = '';
-
-    if(username.length < 3) {
-      blurMessage.textContent = 'Username must be at least 3 characters.';
-      return;
-    }
-    if(password.length < 5) {
-      blurMessage.textContent = 'Password must be at least 5 characters.';
-      return;
-    }
-
-    // Check if user exists
-    if(users.hasOwnProperty(username)) {
-      if(users[username] !== password) {
-        blurMessage.textContent = 'Incorrect password.';
-        return;
-      }
-      // Login success
-      currentUser = username;
-      localStorage.setItem('csc_rp_currentUser', currentUser);
-      showDashboard();
-    } else {
-      // Register new user with their chosen password
-      users[username] = password;
-      localStorage.setItem('csc_rp_users', JSON.stringify(users));
-      currentUser = username;
-      localStorage.setItem('csc_rp_currentUser', currentUser);
-      showDashboard();
-    }
+  modalCloseBtn.addEventListener('click', () => {
+    modalOverlay.style.display = 'none';
   });
 
-  // Add to Cart buttons (all disabled due to out of stock)
-  document.querySelectorAll('.buy-button').forEach((btn, idx) => {
-    btn.addEventListener('click', () => {
-      if(!currentUser) {
-        alert('Please login first!');
-        return;
-      }
-      const product = products[idx];
-      if(product.stock <= 0) {
-        alert('This item is currently out of stock.');
-        return;
-      }
-      if(cart[product.id]) {
-        cart[product.id]++;
+  // Search bar filtering
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    const cards = productsSection.querySelectorAll('.card');
+    cards.forEach(card => {
+      const title = card.querySelector('h2').textContent.toLowerCase();
+      const desc = card.querySelector('p').textContent.toLowerCase();
+      if(title.includes(query) || desc.includes(query)) {
+        card.style.display = 'flex';
       } else {
-        cart[product.id] = 1;
+        card.style.display = 'none';
       }
-      saveCart();
-      updateCartUI();
     });
   });
 
-  // Checkout button
-  checkoutBtn.addEventListener('click', () => {
-    if(Object.keys(cart).length === 0) return;
-    // Generate random order ID
-    let orderId = 'CSCRP-' + Math.random().toString(36).slice(2,10).toUpperCase();
-    // Clear cart
-    cart = {};
-    saveCart();
-    updateCartUI();
-    // Show modal
-    modalOrderId.textContent = orderId;
-    modalOverlay.style.display = 'flex';
-  });
-
-  // Accessibility: close modal on ESC
-  window.addEventListener('keydown', e => {
-    if(e.key === 'Escape' && modalOverlay.style.display === 'flex') {
-      closeModal();
-    }
-  });
-
-  // Init: check if user logged in
-  if(currentUser && users.hasOwnProperty(currentUser)) {
-    showDashboard();
-  } else {
-    blurOverlay.style.display = 'flex';
-    appDiv.style.filter = 'blur(6px)';
-  }
 </script>
+
 </body>
 </html>
